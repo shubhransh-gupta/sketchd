@@ -7,11 +7,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:pages": "GITHUB_PAGES=true tsc -b && GITHUB_PAGES=true vite build && cp dist/index.html dist/404.html",
     "lint": "oxlint src",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
-    "preview": "vite preview",
-    "deploy": "vercel --prod"
+    "preview": "vite preview"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

@@ -19,7 +19,30 @@ export function generateShortId(): string {
   return Math.random().toString(36).substring(2, 8);
 }
 
+function siteOrigin(): string {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  const configured = import.meta.env.VITE_SITE_URL as string | undefined;
+  return configured || 'https://shubhransh-gupta.github.io';
+}
+
+function siteBasePath(): string {
+  if (typeof window !== 'undefined') {
+    return import.meta.env.BASE_URL.replace(/\/$/, '');
+  }
+  const configured = import.meta.env.VITE_SITE_URL as string | undefined;
+  if (configured?.includes('.github.io/')) {
+    return '/sketchd';
+  }
+  return import.meta.env.BASE_URL.replace(/\/$/, '');
+}
+
 export function getShareUrl(id: string): string {
-  const base = typeof window !== 'undefined' ? window.location.origin : 'https://sketchd.dev';
-  return `${base}/d/${id}`;
+  const base = siteBasePath();
+  return `${siteOrigin()}${base}/d/${id}`;
+}
+
+export function isGitHubPages(): boolean {
+  return typeof window !== 'undefined' && window.location.hostname.endsWith('github.io');
 }

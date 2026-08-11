@@ -1,0 +1,50 @@
+name: Save drawing to GitHub
+
+# Saves drawings pushed from the app (via repository_dispatch) into sketchd-drawings.
+# Requires repo secret: DRAWINGS_REPO_TOKEN (PAT with Contents write on sketchd-drawings)
+
+on:
+  repository_dispatch:
+    types: [save-drawing]
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Save drawing JSON
+        env:
+          DRAWING_ID: ${{ github.event.client_payload.id }}
+          DRAWING_JSON: ${{ toJson(github.event.client_payload.document) }}
+          DRAWINGS_REPO: ${{ vars.DRAWINGS_REPO || 'shubhransh-gupta/sketchd-drawings' }}
+          DRAWINGS_TOKEN: ${{ secrets.DRAWINGS_REPO_TOKEN }}
+        run: |
+          if [ -z "$DRAWINGS_TOKEN" ]; then
+            echo "DRAWINGS_REPO_TOKEN secret not configured"
+            exit 1
+          fi
+
+          OWNER="${DRAWINGS_REPO%%/*}"
+          REPO="${DRAWINGS_REPO##*/}"
+          PATH="drawings/${DRAWING_ID}.json"
+          CONTENT=$(echo "$DRAWING_JSON" | base64 -w 0)
+
+          SHA=$(curl -s \
+            -H "Authorization: Bearer $DRAWINGS_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$OWNER/$REPO/contents/$PATH" \
+            | jq -r '.sha // empty')
+
+          BODY=$(jq -n \
+            --arg msg "Save drawing: $DRAWING_ID" \
+            --arg content "$CONTENT" \
+            --arg sha "$SHA" \
+            '{message: $msg, content: $content, branch: "main"} + (if $sha != "" then {sha: $sha} else {} end)')
+
+          curl -sf -X PUT \
+            -H "Authorization: Bearer $DRAWINGS_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            -d "$BODY" \
+            "https://api.github.com/repos/$OWNER/$REPO/contents/$PATH"
+
+          echo "Saved drawing $DRAWING_ID to $DRAWINGS_REPO"

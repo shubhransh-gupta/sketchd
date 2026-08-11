@@ -89,19 +89,24 @@ See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for full setup and Vercel deploym
 
 ## Deployment
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/shubhransh-gupta/sketchd&env=GITHUB_TOKEN,GITHUB_REPO,SITE_URL&envDescription=GitHub%20API%20credentials&project-name=sketchd)
+### GitHub Pages (recommended)
 
-Required environment variables on Vercel:
+Live at: **https://shubhransh-gupta.github.io/sketchd/**
 
-| Variable | Value |
-|----------|-------|
-| `GITHUB_TOKEN` | Fine-grained PAT with Contents read/write on `sketchd-drawings` |
-| `GITHUB_REPO` | `your-username/sketchd-drawings` |
-| `SITE_URL` | Your Vercel deployment URL |
+Every push to `main` auto-deploys via GitHub Actions.
 
 ```bash
-npm run deploy   # or: npx vercel --prod
+# One-time: enable Pages (already configured if using Actions source)
+gh api repos/shubhransh-gupta/sketchd/pages -X POST -f build_type=workflow
 ```
+
+On GitHub Pages, drawings save locally in your browser. Shared links load drawings from the public [`sketchd-drawings`](https://github.com/shubhransh-gupta/sketchd-drawings) repo (after publishing via local dev with `GITHUB_TOKEN`).
+
+### Vercel (optional — enables cloud save API)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/shubhransh-gupta/sketchd&env=GITHUB_TOKEN,GITHUB_REPO,SITE_URL&envDescription=GitHub%20API%20credentials&project-name=sketchd)
+
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for GitHub token setup and Vercel env vars.
 
 ## Scripts
 
@@ -112,7 +117,13 @@ npm run preview    # Preview production build
 npm run lint       # Lint with oxlint
 npm run typecheck  # TypeScript check
 npm run test       # Run tests
-npm run deploy     # Deploy to Vercel (production)
+```
+
+To build locally the same way CI does for GitHub Pages:
+
+```bash
+GITHUB_PAGES=true npm run build
+cp dist/index.html dist/404.html
 ```
 
 ## Contributing

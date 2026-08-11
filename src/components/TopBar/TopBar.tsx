@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Check, Loader2, AlertCircle } from 'lucide-react';
 import { useDrawing } from '../../context/drawing-context-value';
 import { Logo } from '../Logo/Logo';
@@ -64,9 +65,9 @@ export function TopBar({ readOnly = false }: { readOnly?: boolean }) {
     <>
       <header className={styles.bar} role="banner">
         <div className={styles.left}>
-          <a href="/" className={styles.logoLink} aria-label="Sketch'd home">
+          <Link to="/" className={styles.logoLink} aria-label="Sketch'd home">
             <Logo size={22} />
-          </a>
+          </Link>
 
           {!readOnly && (
             <div className={styles.titleArea}>

@@ -1,6 +1,6 @@
 import type { DrawingDocument, DrawingMetadata } from '../types';
 import { FORMAT_VERSION } from '../types';
-import { generateDrawingId } from './id';
+import { generateDrawingId, getShareUrl } from './id';
 
 const STORAGE_PREFIX = 'sketchd:';
 const DRAWINGS_INDEX_KEY = `${STORAGE_PREFIX}index`;
@@ -11,6 +11,11 @@ export type SaveResult =
 
 function getDrawingKey(id: string): string {
   return `${STORAGE_PREFIX}drawing:${id}`;
+}
+
+function rawDrawingsBase(): string | null {
+  const configured = import.meta.env.VITE_DRAWINGS_RAW_BASE as string | undefined;
+  return configured || 'https://raw.githubusercontent.com/shubhransh-gupta/sketchd-drawings/main/drawings';
 }
 
 export function getDrawingsIndex(): string[] {
@@ -94,8 +99,20 @@ export function createEditableCopy(source: DrawingDocument): DrawingDocument {
   };
 }
 
-export async function saveToGitHub(doc: DrawingDocument): Promise<SaveResult> {
-  const localUrl = `${window.location.origin}/d/${doc.metadata.id}`;
+async function loadFromRawGitHub(id: string): Promise<DrawingDocument | null> {
+  const base = rawDrawingsBase();
+  if (!base) return null;
+
+  const safeId = id.replace(/[^a-z0-9-]/gi, '');
+  const response = await fetch(`${base}/${safeId}.json`, { cache: 'no-cache' });
+  if (!response.ok) return null;
+  return (await response.json()) as DrawingDocument;
+}
+
+async function saveToApi(doc: DrawingDocument): Promise<SaveResult | null> {
+  if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+    return null;
+  }
 
   try {
     const response = await fetch('/api/save', {
@@ -106,44 +123,63 @@ export async function saveToGitHub(doc: DrawingDocument): Promise<SaveResult> {
 
     if (response.ok) {
       const data = await response.json();
-      // Mirror to local cache without double version bump
       saveDrawingLocally(doc, false);
       return {
         source: 'github',
         id: data.id ?? doc.metadata.id,
-        url: data.url ?? localUrl,
+        url: data.url ?? getShareUrl(doc.metadata.id),
       };
     }
-
-    const err = await response.json().catch(() => ({}));
-    return {
-      source: 'local',
-      id: doc.metadata.id,
-      url: localUrl,
-      warning: err.error ?? 'GitHub unavailable — saved locally only',
-    };
   } catch {
-    return {
-      source: 'local',
-      id: doc.metadata.id,
-      url: localUrl,
-      warning: 'Offline — saved locally only',
-    };
+    // API unavailable
   }
+  return null;
+}
+
+export async function saveToGitHub(doc: DrawingDocument): Promise<SaveResult> {
+  const url = getShareUrl(doc.metadata.id);
+
+  const apiResult = await saveToApi(doc);
+  if (apiResult) return apiResult;
+
+  // GitHub Pages: no serverless runtime — drawings persist locally on this device.
+  // Shared links work for drawings previously saved to sketchd-drawings (via dev API).
+  return {
+    source: 'local',
+    id: doc.metadata.id,
+    url,
+    warning: 'Saved on this device. Use local dev with GITHUB_TOKEN to publish shareable drawings.',
+  };
 }
 
 export async function loadFromGitHub(id: string): Promise<DrawingDocument | null> {
+  const local = loadDrawingLocally(id);
+  if (local) return local;
+
+  if (typeof window === 'undefined' || !window.location.hostname.endsWith('github.io')) {
+    try {
+      const response = await fetch(`/api/drawings/${encodeURIComponent(id)}`);
+      if (response.ok) {
+        const doc = (await response.json()) as DrawingDocument;
+        saveDrawingLocally(doc, false);
+        return doc;
+      }
+    } catch {
+      // fall through
+    }
+  }
+
   try {
-    const response = await fetch(`/api/drawings/${encodeURIComponent(id)}`);
-    if (response.ok) {
-      const doc = (await response.json()) as DrawingDocument;
+    const doc = await loadFromRawGitHub(id);
+    if (doc) {
       saveDrawingLocally(doc, false);
       return doc;
     }
   } catch {
-    // Fall through to local
+    // fall through
   }
-  return loadDrawingLocally(id);
+
+  return null;
 }
 
 export function saveTitleLocally(id: string, title: string): void {
