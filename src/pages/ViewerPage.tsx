@@ -69,7 +69,7 @@ export function ViewerPage() {
       navigate('/');
       return;
     }
-    loadFromGitHub(id).then((loaded) => {
+    loadFromGitHub(id, { preferRemote: true }).then((loaded) => {
       if (!loaded) {
         navigate('/404');
         return;

@@ -112,7 +112,7 @@ export async function saveDrawingToGitHub(
     throw new Error(`GitHub PUT failed: ${response.status} ${err}`);
   }
 
-  const siteUrl = process.env.SITE_URL || 'https://sketchd.dev';
+  const siteUrl = process.env.SITE_URL || 'https://shubhransh-gupta.github.io/sketchd';
   return { id, url: `${siteUrl}/d/${id}` };
 }
 

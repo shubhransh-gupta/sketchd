@@ -13,9 +13,17 @@ function getDrawingKey(id: string): string {
   return `${STORAGE_PREFIX}drawing:${id}`;
 }
 
-function rawDrawingsBase(): string | null {
+function apiBase(): string {
+  const configured = import.meta.env.VITE_API_URL as string | undefined;
+  return configured ? configured.replace(/\/$/, '') : '';
+}
+
+function rawDrawingsBase(): string {
   const configured = import.meta.env.VITE_DRAWINGS_RAW_BASE as string | undefined;
-  return configured || 'https://raw.githubusercontent.com/shubhransh-gupta/sketchd-drawings/main/drawings';
+  return (
+    configured ||
+    'https://raw.githubusercontent.com/shubhransh-gupta/sketchd-drawings/main/drawings'
+  );
 }
 
 export function getDrawingsIndex(): string[] {
@@ -100,22 +108,28 @@ export function createEditableCopy(source: DrawingDocument): DrawingDocument {
 }
 
 async function loadFromRawGitHub(id: string): Promise<DrawingDocument | null> {
-  const base = rawDrawingsBase();
-  if (!base) return null;
-
   const safeId = id.replace(/[^a-z0-9-]/gi, '');
-  const response = await fetch(`${base}/${safeId}.json`, { cache: 'no-cache' });
+  const response = await fetch(`${rawDrawingsBase()}/${safeId}.json`, {
+    cache: 'no-cache',
+  });
   if (!response.ok) return null;
   return (await response.json()) as DrawingDocument;
 }
 
-async function saveToApi(doc: DrawingDocument): Promise<SaveResult | null> {
-  if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
-    return null;
-  }
+function saveEndpoint(): string {
+  const base = apiBase();
+  return base ? `${base}/api/save` : '/api/save';
+}
 
+function loadEndpoint(id: string): string {
+  const base = apiBase();
+  const path = `/api/drawings/${encodeURIComponent(id)}`;
+  return base ? `${base}${path}` : path;
+}
+
+async function saveToApi(doc: DrawingDocument): Promise<SaveResult | null> {
   try {
-    const response = await fetch('/api/save', {
+    const response = await fetch(saveEndpoint(), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(doc),
@@ -130,45 +144,54 @@ async function saveToApi(doc: DrawingDocument): Promise<SaveResult | null> {
         url: data.url ?? getShareUrl(doc.metadata.id),
       };
     }
-  } catch {
-    // API unavailable
+
+    const err = await response.json().catch(() => ({}));
+    console.warn('[save]', err.error ?? response.status);
+  } catch (error) {
+    console.warn('[save]', error);
   }
   return null;
 }
 
 export async function saveToGitHub(doc: DrawingDocument): Promise<SaveResult> {
   const url = getShareUrl(doc.metadata.id);
-
   const apiResult = await saveToApi(doc);
+
   if (apiResult) return apiResult;
 
-  // GitHub Pages: no serverless runtime — drawings persist locally on this device.
-  // Shared links work for drawings previously saved to sketchd-drawings (via dev API).
   return {
     source: 'local',
     id: doc.metadata.id,
     url,
-    warning: 'Saved on this device. Use local dev with GITHUB_TOKEN to publish shareable drawings.',
+    warning:
+      'Saved locally only. Cloud save API is not reachable — check docs/DEPLOYMENT.md to enable GitHub persistence.',
   };
 }
 
-export async function loadFromGitHub(id: string): Promise<DrawingDocument | null> {
-  const local = loadDrawingLocally(id);
-  if (local) return local;
+export async function loadFromGitHub(
+  id: string,
+  options: { preferRemote?: boolean } = {},
+): Promise<DrawingDocument | null> {
+  const { preferRemote = false } = options;
 
-  if (typeof window === 'undefined' || !window.location.hostname.endsWith('github.io')) {
-    try {
-      const response = await fetch(`/api/drawings/${encodeURIComponent(id)}`);
-      if (response.ok) {
-        const doc = (await response.json()) as DrawingDocument;
-        saveDrawingLocally(doc, false);
-        return doc;
-      }
-    } catch {
-      // fall through
-    }
+  if (!preferRemote) {
+    const local = loadDrawingLocally(id);
+    if (local) return local;
   }
 
+  // 1. Save API / load API
+  try {
+    const response = await fetch(loadEndpoint(id));
+    if (response.ok) {
+      const doc = (await response.json()) as DrawingDocument;
+      saveDrawingLocally(doc, false);
+      return doc;
+    }
+  } catch {
+    // fall through
+  }
+
+  // 2. Raw GitHub JSON (public CDN — works once file is in sketchd-drawings)
   try {
     const doc = await loadFromRawGitHub(id);
     if (doc) {
@@ -177,6 +200,11 @@ export async function loadFromGitHub(id: string): Promise<DrawingDocument | null
     }
   } catch {
     // fall through
+  }
+
+  // 3. Local fallback (esp. for editor reopening same drawing)
+  if (preferRemote) {
+    return loadDrawingLocally(id);
   }
 
   return null;
@@ -206,5 +234,16 @@ export function loadPendingDocument(): DrawingDocument | null {
     return JSON.parse(raw);
   } catch {
     return null;
+  }
+}
+
+export async function checkSaveApiHealth(): Promise<boolean> {
+  const base = apiBase();
+  if (!base) return false;
+  try {
+    const res = await fetch(`${base}/api/health`);
+    return res.ok;
+  } catch {
+    return false;
   }
 }
