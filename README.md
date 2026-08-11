@@ -1,145 +1,142 @@
+<div align="center">
+
 # Sketch'd
 
-**Draw. Save. Share. No account.**
+### Draw. Save. Share. No account.
 
-A fast, open-source infinite canvas where drawings can be saved directly to GitHub and shared with a URL.
+[![Live Demo](https://img.shields.io/badge/demo-live-6366f1?style=for-the-badge&logo=githubpages&logoColor=white)](https://shubhransh-gupta.github.io/sketchd/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-24292f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shubhransh-gupta/sketchd/actions)
 
-No login. No signup. No workspace. No friction.
+<br />
+
+**A fast, open-source infinite canvas.**  
+Draw anything. Save locally or to GitHub. Share with a link. Zero signups.
+
+<br />
+
+[**Open Sketch'd →**](https://shubhransh-gupta.github.io/sketchd/)
+
+<br />
+
+<img src="./public/og-image.svg" alt="Sketch'd preview" width="640" />
+
+</div>
+
+---
+
+## Why Sketch'd?
+
+| | |
+|---|---|
+| **Zero friction** | Open → draw. No login, no workspace, no onboarding |
+| **Canvas-first** | Full-screen drawing surface with floating, minimal UI |
+| **Developer-native** | ⌘K command palette, keyboard shortcuts, GitHub persistence |
+| **Shareable** | Human-readable URLs like `/d/quiet-moon-42` |
+| **Private by default** | Drawings live in your browser until you choose to save |
 
 ```
-Open → Draw → Save → Share
+  Open          Draw          Save          Share
+    │             │              │              │
+    ▼             ▼              ▼              ▼
+ Browser  →  Infinite canvas  →  Local / GitHub  →  Copy link
 ```
 
-![Sketch'd OG Image](./public/og-image.svg)
+---
 
 ## Features
 
-- **Canvas-first design** — Full viewport drawing with floating UI
-- **Zero account friction** — Open and draw immediately
-- **GitHub-native persistence** — Save drawings to GitHub (local-first fallback)
-- **Shareable URLs** — `sketchd.dev/d/quiet-moon-42`
-- **Developer tool feel** — Command palette (⌘K), keyboard shortcuts, context menus
-- **Premium themes** — System / Light / Dark with layered surfaces
-- **PWA-ready** — Installable with proper manifest and icons
-- **Mobile support** — Bottom toolbar with touch-friendly controls
+- **Tools** — Select, hand, shapes, arrows, freehand, text, image upload
+- **Touchpad zoom** — Pinch to zoom, two-finger pan
+- **Themes** — System / light / dark with layered surfaces
+- **Command palette** — `⌘K` / `Ctrl+K`
+- **Clear all** — One tap with confirmation dialog
+- **PWA-ready** — Installable from the browser
+- **Mobile** — Bottom toolbar + touch gestures
 
-## Quick Start
+---
+
+## Keyboard shortcuts
+
+| Key | Action |
+|-----|--------|
+| `V` | Select |
+| `H` | Hand (pan) |
+| `R` `D` `O` | Rectangle / diamond / ellipse |
+| `A` `L` `P` | Arrow / line / draw |
+| `T` `I` | Text / image |
+| `⌘K` | Command palette |
+| `⌘S` | Save |
+| `⌘Z` / `⌘⇧Z` | Undo / redo |
+
+---
+
+## Quick start
 
 ```bash
+git clone https://github.com/shubhransh-gupta/sketchd.git
+cd sketchd
 npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173)
+Open **http://localhost:5173**
 
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `V` | Select |
-| `H` | Hand (pan) |
-| `R` | Rectangle |
-| `D` | Diamond |
-| `O` | Ellipse |
-| `A` | Arrow |
-| `L` | Line |
-| `P` | Draw (freehand) |
-| `T` | Text |
-| `⌘K` / `Ctrl+K` | Command palette |
-| `⌘S` / `Ctrl+S` | Save |
-| `⌘Z` / `Ctrl+Z` | Undo |
-| `⌘⇧Z` / `Ctrl+Shift+Z` | Redo |
-
-## Architecture
-
-```
-src/
-├── components/     # UI (TopBar, Toolbar, Canvas, etc.)
-├── context/        # Drawing & theme state
-├── hooks/          # Keyboard, etc.
-├── lib/            # Canvas engine, storage, IDs
-├── pages/          # Editor, Viewer, 404
-├── styles/         # Design tokens & globals
-└── types/          # TypeScript definitions
-```
-
-### Storage
-
-- **Local-first**: Drawings saved to `localStorage` immediately
-- **GitHub sync**: Optional API endpoint for remote persistence
-- **Share URLs**: Human-readable IDs like `quiet-moon-42`
-
-## GitHub Setup
-
-Drawings are persisted to a dedicated GitHub repo via serverless API routes.
+### Optional: GitHub cloud save
 
 ```bash
-# 1. Create the storage repo
-gh repo create sketchd-drawings --public
-
-# 2. Configure environment
 cp .env.example .env
-# Set GITHUB_TOKEN and GITHUB_REPO=your-username/sketchd-drawings
-
-# 3. Run locally (API middleware included in dev server)
+# GITHUB_TOKEN=...  GITHUB_REPO=your-user/sketchd-drawings
 npm run dev
 ```
 
-See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for full setup and Vercel deployment.
+---
 
-## Deployment
+## Deploy
 
-### GitHub Pages (recommended)
+**Live:** [shubhransh-gupta.github.io/sketchd](https://shubhransh-gupta.github.io/sketchd/)
 
-Live at: **https://shubhransh-gupta.github.io/sketchd/**
+Pushes to `main` auto-deploy via GitHub Actions. See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for details.
 
-Every push to `main` auto-deploys via GitHub Actions.
+---
 
-```bash
-# One-time: enable Pages (already configured if using Actions source)
-gh api repos/shubhransh-gupta/sketchd/pages -X POST -f build_type=workflow
+## Stack
+
+```
+React 19 · TypeScript · Vite · Canvas 2D · GitHub Pages
 ```
 
-On GitHub Pages, drawings save locally in your browser. Shared links load drawings from the public [`sketchd-drawings`](https://github.com/shubhransh-gupta/sketchd-drawings) repo (after publishing via local dev with `GITHUB_TOKEN`).
-
-### Vercel (optional — enables cloud save API)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/shubhransh-gupta/sketchd&env=GITHUB_TOKEN,GITHUB_REPO,SITE_URL&envDescription=GitHub%20API%20credentials&project-name=sketchd)
-
-See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for GitHub token setup and Vercel env vars.
-
-## Scripts
-
-```bash
-npm run dev        # Development server (includes /api middleware)
-npm run build      # Production build
-npm run preview    # Preview production build
-npm run lint       # Lint with oxlint
-npm run typecheck  # TypeScript check
-npm run test       # Run tests
+```
+src/
+├── components/   TopBar, Toolbar, Canvas, …
+├── lib/          Canvas engine, storage, image cache
+├── context/      Drawing + theme state
+└── pages/        Editor, viewer, 404
 ```
 
-To build locally the same way CI does for GitHub Pages:
-
-```bash
-GITHUB_PAGES=true npm run build
-cp dist/index.html dist/404.html
-```
+---
 
 ## Contributing
 
-PRs welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for branch protection rules, local setup, and the recommended workflow.
+PRs welcome → [CONTRIBUTING.md](./CONTRIBUTING.md)
 
-Keep the canvas-first, zero-friction philosophy.
+---
 
 ## Roadmap
 
+- [x] Touchpad zoom & pan
+- [x] Text tool
+- [x] Image upload
+- [x] Clear all with confirm
+- [ ] Export PNG / SVG
 - [ ] Real-time collaboration
-- [ ] Export PNG/SVG
-- [ ] Image upload
-- [ ] Grid snap guides
-- [ ] Plugin system
 
-## License
+---
 
-MIT
+<div align="center">
+
+**No login. No signup. Just draw.**
+
+MIT © [shubhransh-gupta](https://github.com/shubhransh-gupta)
+
+</div>

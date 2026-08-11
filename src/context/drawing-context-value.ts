@@ -37,6 +37,7 @@ export interface DrawingContextValue {
   removeToast: (id: string) => void;
   duplicateSelected: () => void;
   loadDocument: (doc: DrawingDocument) => void;
+  clearAll: () => void;
 }
 
 export const DrawingContext = createContext<DrawingContextValue | null>(null);

@@ -4,12 +4,22 @@
   z-index: var(--z-canvas);
   background: var(--bg-canvas);
   overflow: hidden;
+  touch-action: none;
 }
 
 .canvas {
   display: block;
   width: 100%;
   height: 100%;
+  touch-action: none;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .default {
@@ -30,14 +40,20 @@
 
 .textInput {
   position: absolute;
-  z-index: var(--z-ui);
+  z-index: var(--z-popover);
   padding: 4px 8px;
   border: 2px solid var(--brand-primary);
   border-radius: var(--radius-sm);
   background: var(--bg-surface-solid);
-  font-size: 20px;
   font-family: var(--font-sans);
   color: var(--text-primary);
-  min-width: 120px;
+  line-height: 1.3;
+  resize: both;
   outline: none;
+  box-shadow: var(--shadow-md);
+  field-sizing: content;
+}
+
+.textInput::placeholder {
+  color: var(--text-tertiary);
 }

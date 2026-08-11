@@ -133,6 +133,35 @@
   border-color: var(--border-strong);
 }
 
+.clearButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface-solid);
+  color: var(--text-secondary);
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.clearButton:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--save-error);
+}
+
+.clearButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.clearLabel {
+  display: inline;
+}
+
 .spin {
   animation: spin 1s linear infinite;
 }
@@ -149,6 +178,10 @@
   }
 
   .savedBadge {
+    display: none;
+  }
+
+  .clearLabel {
     display: none;
   }
 }

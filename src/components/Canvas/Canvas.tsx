@@ -1,14 +1,17 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
-import type { DrawingElement, Point } from '../../types';
+import type { DrawingElement, Point, AppState } from '../../types';
 import { useDrawing } from '../../context/drawing-context-value';
 import {
   renderScene,
   screenToCanvas,
+  canvasToScreen,
   hitTestElement,
   generateElementId,
   getElementsBounds,
   snapToGrid,
+  getDefaultStrokeColor,
 } from '../../lib/canvas';
+import { subscribeImageLoads, preloadImages } from '../../lib/imageCache';
 import { EmptyState } from '../EmptyState/EmptyState';
 import { ContextMenu } from '../ContextMenu/ContextMenu';
 import styles from './Canvas.module.css';
@@ -19,9 +22,30 @@ interface ContextMenuState {
   type: 'canvas' | 'element';
 }
 
+interface TextInputState {
+  screenX: number;
+  screenY: number;
+  canvasX: number;
+  canvasY: number;
+}
+
 export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const appStateRef = useRef<AppState>({
+    zoom: 1,
+    scrollX: 0,
+    scrollY: 0,
+    selectedElementIds: [],
+    currentTool: 'select' as AppState['currentTool'],
+    showGrid: false,
+    snapToGrid: false,
+    gridSize: 20,
+  });
+  const pendingImagePoint = useRef<Point | null>(null);
+  const textValueRef = useRef('');
+
   const {
     state,
     addElement,
@@ -38,7 +62,18 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState<Point | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
-  const [textInput, setTextInput] = useState<{ x: number; y: number; canvasX: number; canvasY: number } | null>(null);
+  const [textInput, setTextInput] = useState<TextInputState | null>(null);
+  const [, bumpRender] = useState(0);
+
+  appStateRef.current = appState;
+
+  useEffect(() => {
+    const urls = elements
+      .filter((el): el is DrawingElement & { type: 'image'; dataUrl: string } => el.type === 'image')
+      .map((el) => el.dataUrl);
+    preloadImages(urls);
+    return subscribeImageLoads(() => bumpRender((n) => n + 1));
+  }, [elements]);
 
   const render = useCallback(() => {
     const canvas = canvasRef.current;
@@ -56,16 +91,16 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
     canvas.style.height = `${rect.height}px`;
     ctx.scale(dpr, dpr);
 
-    const styles = getComputedStyle(document.documentElement);
+    const css = getComputedStyle(document.documentElement);
     renderScene(
       ctx,
       elements,
       appState,
       rect.width,
       rect.height,
-      styles.getPropertyValue('--grid-color').trim(),
-      styles.getPropertyValue('--selection-color').trim(),
-      styles.getPropertyValue('--selection-handle').trim(),
+      css.getPropertyValue('--grid-color').trim(),
+      css.getPropertyValue('--selection-color').trim(),
+      css.getPropertyValue('--selection-handle').trim(),
     );
 
     if (isDrawing && startPoint && currentPoints.length > 0) {
@@ -125,12 +160,46 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [render]);
 
-  const getCanvasPoint = (e: React.MouseEvent | React.TouchEvent): Point => {
+  // Touchpad / mouse wheel: pinch-to-zoom + two-finger pan
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = container.getBoundingClientRect();
+      const current = appStateRef.current;
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // Trackpad pinch sends wheel + ctrlKey; mouse wheel zoom with ctrl/cmd
+      const isZoom = e.ctrlKey || e.metaKey;
+
+      if (isZoom) {
+        const delta = -e.deltaY * 0.008;
+        const newZoom = Math.min(Math.max(current.zoom * (1 + delta), 0.1), 5);
+        const ratio = newZoom / current.zoom;
+        setAppState({
+          zoom: newZoom,
+          scrollX: mouseX - (mouseX - current.scrollX) * ratio,
+          scrollY: mouseY - (mouseY - current.scrollY) * ratio,
+        });
+      } else {
+        setAppState({
+          scrollX: current.scrollX - e.deltaX,
+          scrollY: current.scrollY - e.deltaY,
+        });
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
+  }, [setAppState]);
+
+  const getCanvasPoint = (clientX: number, clientY: number): Point => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
     return screenToCanvas(clientX, clientY, appState, rect);
   };
 
@@ -143,7 +212,7 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
       width: Math.abs(end.x - start.x),
       height: Math.abs(end.y - start.y),
       angle: 0,
-      strokeColor: '#1e1e1e',
+      strokeColor: getDefaultStrokeColor(),
       backgroundColor: 'transparent',
       fillStyle: 'solid' as const,
       strokeWidth: 2,
@@ -172,20 +241,113 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
     }
   };
 
-  const handlePointerDown = (e: React.MouseEvent) => {
+  const openTextInput = (point: Point) => {
+    const screen = canvasToScreen(point.x, point.y, appState);
+    textValueRef.current = '';
+    setTextInput({
+      screenX: screen.x,
+      screenY: screen.y,
+      canvasX: point.x,
+      canvasY: point.y,
+    });
+  };
+
+  const handleTextSubmit = () => {
+    const text = textValueRef.current.trim();
+    if (text && textInput) {
+      addElement({
+        id: generateElementId(),
+        type: 'text',
+        x: textInput.canvasX,
+        y: textInput.canvasY,
+        width: 200,
+        height: 30,
+        angle: 0,
+        text,
+        fontSize: 20,
+        fontFamily: 'DM Sans, sans-serif',
+        strokeColor: getDefaultStrokeColor(),
+        backgroundColor: 'transparent',
+        fillStyle: 'solid',
+        strokeWidth: 1,
+        roughness: 0,
+        opacity: 1,
+        locked: false,
+      });
+    }
+    setTextInput(null);
+    textValueRef.current = '';
+  };
+
+  const placeImage = (dataUrl: string, point: Point) => {
+    const img = new Image();
+    img.onload = () => {
+      const maxSize = 480;
+      let w = img.naturalWidth;
+      let h = img.naturalHeight;
+      if (w > maxSize || h > maxSize) {
+        const scale = maxSize / Math.max(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+      addElement({
+        id: generateElementId(),
+        type: 'image',
+        x: point.x,
+        y: point.y,
+        width: w,
+        height: h,
+        angle: 0,
+        dataUrl,
+        strokeColor: 'transparent',
+        backgroundColor: 'transparent',
+        fillStyle: 'solid',
+        strokeWidth: 0,
+        roughness: 0,
+        opacity: 1,
+        locked: false,
+      });
+      bumpRender((n) => n + 1);
+    };
+    img.src = dataUrl;
+  };
+
+  const handleImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const point = pendingImagePoint.current;
+    e.target.value = '';
+    pendingImagePoint.current = null;
+
+    if (!file || !point) return;
+    if (!file.type.startsWith('image/')) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        placeImage(reader.result, point);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (textInput) return;
+
     if (readOnly) {
       setIsPanning(true);
       setPanStart({ x: e.clientX, y: e.clientY });
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
       return;
     }
 
     setContextMenu(null);
-    const point = getCanvasPoint(e);
+    const point = getCanvasPoint(e.clientX, e.clientY);
     const tool = appState.currentTool;
 
     if (tool === 'hand' || e.button === 1 || (e.button === 0 && e.altKey)) {
       setIsPanning(true);
       setPanStart({ x: e.clientX, y: e.clientY });
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
       return;
     }
 
@@ -205,24 +367,24 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
     }
 
     if (tool === 'text') {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      setTextInput({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        canvasX: point.x,
-        canvasY: point.y,
-      });
+      e.preventDefault();
+      openTextInput(point);
+      return;
+    }
+
+    if (tool === 'image') {
+      pendingImagePoint.current = point;
+      fileInputRef.current?.click();
       return;
     }
 
     setIsDrawing(true);
     setStartPoint(point);
     setCurrentPoints([point]);
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
   };
 
-  const handlePointerMove = (e: React.MouseEvent) => {
+  const handlePointerMove = (e: React.PointerEvent) => {
     if (isPanning && panStart) {
       const dx = e.clientX - panStart.x;
       const dy = e.clientY - panStart.y;
@@ -235,11 +397,17 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
     }
 
     if (!isDrawing) return;
-    const point = getCanvasPoint(e);
-    setCurrentPoints((prev) => [...prev, point]);
+    const point = getCanvasPoint(e.clientX, e.clientY);
+    setCurrentPoints((prev) => {
+      const last = prev[prev.length - 1];
+      if (last && Math.hypot(point.x - last.x, point.y - last.y) < 1.5) return prev;
+      return [...prev, point];
+    });
   };
 
-  const handlePointerUp = (e: React.MouseEvent) => {
+  const handlePointerUp = (e: React.PointerEvent) => {
+    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+
     if (isPanning) {
       setIsPanning(false);
       setPanStart(null);
@@ -251,13 +419,19 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
       return;
     }
 
-    const point = getCanvasPoint(e);
+    const point = getCanvasPoint(e.clientX, e.clientY);
     const tool = appState.currentTool;
 
     if (tool === 'freedraw' && currentPoints.length > 1) {
       const el = createElement(startPoint, point);
       if (el) addElement(el);
-    } else if (tool !== 'freedraw' && tool !== 'select' && tool !== 'hand' && tool !== 'text') {
+    } else if (
+      tool !== 'freedraw' &&
+      tool !== 'select' &&
+      tool !== 'hand' &&
+      tool !== 'text' &&
+      tool !== 'image'
+    ) {
       const dx = Math.abs(point.x - startPoint.x);
       const dy = Math.abs(point.y - startPoint.y);
       if (dx > 3 || dy > 3) {
@@ -278,31 +452,6 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
       y: e.clientY,
       type: appState.selectedElementIds.length > 0 ? 'element' : 'canvas',
     });
-  };
-
-  const handleTextSubmit = (text: string) => {
-    if (text.trim() && textInput) {
-      addElement({
-        id: generateElementId(),
-        type: 'text',
-        x: textInput.canvasX,
-        y: textInput.canvasY,
-        width: 200,
-        height: 30,
-        angle: 0,
-        text: text.trim(),
-        fontSize: 20,
-        fontFamily: 'DM Sans, sans-serif',
-        strokeColor: '#1e1e1e',
-        backgroundColor: 'transparent',
-        fillStyle: 'solid',
-        strokeWidth: 1,
-        roughness: 0,
-        opacity: 1,
-        locked: false,
-      });
-    }
-    setTextInput(null);
   };
 
   const fitToContent = () => {
@@ -331,33 +480,65 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
         ? styles.default
         : styles.crosshair;
 
+  const textFontSize = 20 * appState.zoom;
+
   return (
     <div ref={containerRef} className={`${styles.container} ${cursorClass}`}>
       <canvas
         ref={canvasRef}
         className={styles.canvas}
-        onMouseDown={handlePointerDown}
-        onMouseMove={handlePointerMove}
-        onMouseUp={handlePointerUp}
-        onMouseLeave={handlePointerUp}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         onContextMenu={handleContextMenu}
         aria-label="Drawing canvas"
       />
 
-      {!readOnly && elements.length === 0 && !state.hasInteracted && (
-        <EmptyState />
-      )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/png,image/jpeg,image/gif,image/webp,image/svg+xml"
+        className={styles.hiddenInput}
+        onChange={handleImageFile}
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+
+      {!readOnly && elements.length === 0 && !state.hasInteracted && <EmptyState />}
 
       {textInput && (
-        <input
+        <textarea
           className={styles.textInput}
-          style={{ left: textInput.x, top: textInput.y }}
+          style={{
+            left: textInput.screenX,
+            top: textInput.screenY,
+            fontSize: textFontSize,
+            minWidth: 160 * appState.zoom,
+          }}
           autoFocus
-          placeholder="Type something..."
-          onBlur={(e) => handleTextSubmit(e.target.value)}
+          rows={1}
+          placeholder="Type here…"
+          defaultValue=""
+          onChange={(e) => {
+            textValueRef.current = e.target.value;
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') handleTextSubmit(e.currentTarget.value);
-            if (e.key === 'Escape') setTextInput(null);
+            e.stopPropagation();
+            if (e.key === 'Escape') {
+              setTextInput(null);
+              textValueRef.current = '';
+            }
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleTextSubmit();
+            }
+          }}
+          onBlur={() => {
+            // Delay so Enter key submit completes first
+            setTimeout(handleTextSubmit, 0);
           }}
         />
       )}

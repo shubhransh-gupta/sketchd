@@ -57,11 +57,17 @@ export interface ShapeElement extends BaseElement {
   type: 'rectangle' | 'diamond' | 'ellipse';
 }
 
+export interface ImageElement extends BaseElement {
+  type: 'image';
+  dataUrl: string;
+}
+
 export type DrawingElement =
   | FreedrawElement
   | TextElement
   | LineElement
-  | ShapeElement;
+  | ShapeElement
+  | ImageElement;
 
 export interface DrawingMetadata {
   id: string;

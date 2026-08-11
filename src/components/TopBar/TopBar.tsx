@@ -1,18 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Loader2, AlertCircle } from 'lucide-react';
+import { Check, Loader2, AlertCircle, Trash2 } from 'lucide-react';
 import { useDrawing } from '../../context/drawing-context-value';
 import { Logo } from '../Logo/Logo';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { ShareDialog } from '../ShareDialog/ShareDialog';
+import { ClearAllDialog } from '../ClearAllDialog/ClearAllDialog';
 import styles from './TopBar.module.css';
 
 export function TopBar({ readOnly = false }: { readOnly?: boolean }) {
-  const { state, setTitle, save } = useDrawing();
+  const { state, setTitle, save, clearAll, addToast } = useDrawing();
   const { metadata } = state.document;
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleValue, setTitleValue] = useState(metadata.title);
   const [showShare, setShowShare] = useState(false);
+  const [showClearAll, setShowClearAll] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -123,6 +125,19 @@ export function TopBar({ readOnly = false }: { readOnly?: boolean }) {
             </button>
           )}
 
+          {!readOnly && (
+            <button
+              className={styles.clearButton}
+              onClick={() => setShowClearAll(true)}
+              disabled={state.document.elements.length === 0}
+              aria-label="Clear all elements"
+              title="Clear all"
+            >
+              <Trash2 size={15} aria-hidden="true" />
+              <span className={styles.clearLabel}>Clear</span>
+            </button>
+          )}
+
           <button
             className={styles.shareButton}
             onClick={() => setShowShare(true)}
@@ -139,6 +154,17 @@ export function TopBar({ readOnly = false }: { readOnly?: boolean }) {
         <ShareDialog
           drawingId={metadata.id}
           onClose={() => setShowShare(false)}
+        />
+      )}
+
+      {showClearAll && (
+        <ClearAllDialog
+          elementCount={state.document.elements.length}
+          onClose={() => setShowClearAll(false)}
+          onConfirm={() => {
+            clearAll();
+            addToast({ type: 'success', title: 'Canvas cleared', duration: 2500 });
+          }}
         />
       )}
     </>

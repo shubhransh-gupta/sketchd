@@ -1,4 +1,5 @@
 import type { DrawingElement, Point, AppState } from '../types';
+import { getCachedImage } from './imageCache';
 
 export function generateElementId(): string {
   return `el_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
@@ -226,6 +227,18 @@ export function renderElement(ctx: CanvasRenderingContext2D, el: DrawingElement)
       });
       break;
     }
+    case 'image': {
+      const img = getCachedImage(el.dataUrl);
+      if (img) {
+        ctx.drawImage(img, el.x, el.y, el.width, el.height);
+      } else {
+        ctx.strokeStyle = '#6366f1';
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(el.x, el.y, el.width, el.height);
+        ctx.setLineDash([]);
+      }
+      break;
+    }
   }
 
   ctx.restore();
@@ -324,6 +337,25 @@ export function getElementsBounds(elements: DrawingElement[]): {
   });
 
   return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+}
+
+export function getDefaultStrokeColor(): string {
+  if (typeof document === 'undefined') return '#1e1e1e';
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() ||
+    '#1e1e1e'
+  );
+}
+
+export function canvasToScreen(
+  canvasX: number,
+  canvasY: number,
+  appState: AppState,
+): Point {
+  return {
+    x: canvasX * appState.zoom + appState.scrollX,
+    y: canvasY * appState.zoom + appState.scrollY,
+  };
 }
 
 export function isMac(): boolean {

@@ -28,6 +28,7 @@ type DrawingAction =
   | { type: 'REDO' }
   | { type: 'LOAD_DOCUMENT'; doc: DrawingDocument }
   | { type: 'DUPLICATE_ELEMENTS'; ids: string[] }
+  | { type: 'CLEAR_ALL' }
   | { type: 'SET_SAVE_STATUS'; status: SaveStatus }
   | { type: 'SET_DIRTY'; isDirty: boolean }
   | { type: 'SET_INTERACTED' }
@@ -205,6 +206,18 @@ function drawingReducer(state: DrawingState, action: DrawingAction): DrawingStat
       };
     }
 
+    case 'CLEAR_ALL':
+      return {
+        ...pushHistory(state, []),
+        document: {
+          ...state.document,
+          elements: [],
+          appState: { ...state.document.appState, selectedElementIds: [] },
+        },
+        hasInteracted: true,
+        isDirty: true,
+      };
+
     case 'SET_SAVE_STATUS':
       return { ...state, saveStatus: action.status };
     case 'SET_DIRTY':
@@ -311,6 +324,7 @@ export function DrawingProvider({
         if (ids.length) dispatch({ type: 'DUPLICATE_ELEMENTS', ids });
       },
       loadDocument: (doc) => dispatch({ type: 'LOAD_DOCUMENT', doc }),
+      clearAll: () => dispatch({ type: 'CLEAR_ALL' }),
     }),
     [state, save, addToast, removeToast],
   );
