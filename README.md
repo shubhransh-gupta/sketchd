@@ -128,7 +128,9 @@ cp dist/index.html dist/404.html
 
 ## Contributing
 
-PRs welcome. Keep the canvas-first, zero-friction philosophy.
+PRs welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for branch protection rules, local setup, and the recommended workflow.
+
+Keep the canvas-first, zero-friction philosophy.
 
 ## Roadmap
 
