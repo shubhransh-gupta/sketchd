@@ -3,7 +3,33 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Draw. Save. Share. No account.",
+  "description": "Draw. Save. Share. No account. A fast, open-source infinite canvas — no login required.",
+  "license": "MIT",
+  "author": "Shubhransh Gupta (https://github.com/shubhransh-gupta)",
+  "homepage": "https://shubhransh-gupta.github.io/sketchd/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shubhransh-gupta/sketchd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shubhransh-gupta/sketchd/issues"
+  },
+  "keywords": [
+    "sketchd",
+    "drawing-app",
+    "whiteboard",
+    "infinite-canvas",
+    "excalidraw-alternative",
+    "diagramming",
+    "no-login",
+    "github-pages",
+    "react",
+    "typescript",
+    "vite",
+    "open-source",
+    "pwa",
+    "developer-tools"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

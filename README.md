@@ -5,21 +5,31 @@
 ### Draw. Save. Share. No account.
 
 [![Live Demo](https://img.shields.io/badge/demo-live-6366f1?style=for-the-badge&logo=githubpages&logoColor=white)](https://shubhransh-gupta.github.io/sketchd/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge)](LICENSE)
-[![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-24292f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shubhransh-gupta/sketchd/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/shubhransh-gupta/sketchd?style=for-the-badge&logo=github&color=6366f1)](https://github.com/shubhransh-gupta/sketchd/stargazers)
+[![Open Source](https://img.shields.io/badge/open--source-❤️-f59e0b?style=for-the-badge)](https://github.com/shubhransh-gupta/sketchd)
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-deployed-222?style=flat-square&logo=githubpages&logoColor=white)](https://shubhransh-gupta.github.io/sketchd/)
 
 <br />
 
-**A fast, open-source infinite canvas.**  
-Draw anything. Save locally or to GitHub. Share with a link. Zero signups.
+**The Excalidraw alternative that needs zero accounts.**  
+Open-source infinite canvas · save to GitHub · share with a URL · no signup ever.
 
 <br />
 
-[**Open Sketch'd →**](https://shubhransh-gupta.github.io/sketchd/)
+[**Try it live →**](https://shubhransh-gupta.github.io/sketchd/) · [**Star on GitHub ⭐**](https://github.com/shubhransh-gupta/sketchd)
 
 <br />
 
 <img src="./public/og-image.svg" alt="Sketch'd preview" width="640" />
+
+<br />
+
+`#drawing-app` · `#whiteboard` · `#infinite-canvas` · `#excalidraw-alternative` · `#no-login` · `#opensource` · `#react` · `#typescript` · `#github-pages` · `#developer-tools` · `#diagramming` · `#pwa`
 
 </div>
 
@@ -137,6 +147,16 @@ PRs welcome → [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 **No login. No signup. Just draw.**
 
-MIT © [shubhransh-gupta](https://github.com/shubhransh-gupta)
+<br />
+
+Created with ❤️ by **[Shubhransh Gupta](https://github.com/shubhransh-gupta)**
+
+<br />
+
+[![Star this repo](https://img.shields.io/github/stars/shubhransh-gupta/sketchd?style=social&label=Star%20Sketch'd)](https://github.com/shubhransh-gupta/sketchd/stargazers)
+
+<br />
+
+Released under the [MIT License](LICENSE) · Copyright © 2026 Shubhransh Gupta
 
 </div>
