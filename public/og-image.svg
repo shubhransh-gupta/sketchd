@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#fafafa"/>
+  <rect x="60" y="60" width="1080" height="510" rx="24" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+  <rect x="100" y="100" width="200" height="140" rx="8" fill="none" stroke="#6366f1" stroke-width="3" stroke-dasharray="8 4"/>
+  <circle cx="450" cy="170" r="60" fill="none" stroke="#6366f1" stroke-width="3"/>
+  <path d="M600 240 L750 100" stroke="#6366f1" stroke-width="3" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6" fill="#6366f1"/>
+    </marker>
+  </defs>
+  <text x="100" y="380" font-family="system-ui, sans-serif" font-size="48" font-weight="700" fill="#111827">Sketch'd</text>
+  <text x="100" y="440" font-family="system-ui, sans-serif" font-size="28" fill="#6b7280">Draw. Save. Share. No account.</text>
+  <rect x="900" y="480" width="180" height="50" rx="25" fill="#6366f1"/>
+  <text x="990" y="512" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="white" text-anchor="middle">Start drawing</text>
+</svg>

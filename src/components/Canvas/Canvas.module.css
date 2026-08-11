@@ -1,0 +1,43 @@
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  background: var(--bg-canvas);
+  overflow: hidden;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.default {
+  cursor: default;
+}
+
+.crosshair {
+  cursor: crosshair;
+}
+
+.grabbing {
+  cursor: grab;
+}
+
+.grabbing:active {
+  cursor: grabbing;
+}
+
+.textInput {
+  position: absolute;
+  z-index: var(--z-ui);
+  padding: 4px 8px;
+  border: 2px solid var(--brand-primary);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-solid);
+  font-size: 20px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  min-width: 120px;
+  outline: none;
+}

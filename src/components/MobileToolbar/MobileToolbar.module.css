@@ -1,0 +1,44 @@
+.toolbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-toolbar);
+    align-items: center;
+    justify-content: space-around;
+    padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom));
+    background: var(--bg-surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: color var(--transition-fast), background var(--transition-fast);
+    min-width: 56px;
+  }
+
+  .tool:hover,
+  .tool.active {
+    color: var(--brand-primary);
+    background: var(--bg-active);
+  }
+
+  .label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+}

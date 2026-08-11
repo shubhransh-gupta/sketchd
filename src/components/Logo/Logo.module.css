@@ -1,0 +1,13 @@
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.text {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+}
