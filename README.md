@@ -35,6 +35,20 @@ Open-source infinite canvas · save to GitHub · share with a URL · no signup e
 
 ---
 
+## Perfect for
+
+> Product Hunt · Hacker News · Reddit · GitHub Trending · Dev Twitter
+
+- **Founders** — architecture diagrams in seconds
+- **Developers** — system design, API flows, RFC sketches  
+- **Students** — whiteboarding without signups
+- **Teams** — share a link, zero workspace setup
+- **Privacy folks** — local-first, no account required
+
+**If Excalidraw + GitHub had a baby with zero friction — that's Sketch'd.**
+
+---
+
 ## Why Sketch'd?
 
 | | |
