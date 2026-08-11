@@ -49,10 +49,10 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
   const {
     state,
     addElement,
-    selectElements,
     setAppState,
     deleteSelected,
     duplicateSelected,
+    deleteElements,
   } = useDrawing();
 
   const { elements, appState } = state.document;
@@ -354,14 +354,7 @@ export function Canvas({ readOnly = false }: { readOnly?: boolean }) {
     if (tool === 'select') {
       const hit = [...elements].reverse().find((el) => hitTestElement(el, point));
       if (hit) {
-        const ids = e.shiftKey
-          ? appState.selectedElementIds.includes(hit.id)
-            ? appState.selectedElementIds.filter((id) => id !== hit.id)
-            : [...appState.selectedElementIds, hit.id]
-          : [hit.id];
-        selectElements(ids);
-      } else {
-        selectElements([]);
+        deleteElements([hit.id]);
       }
       return;
     }

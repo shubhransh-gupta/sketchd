@@ -73,7 +73,7 @@ export function useKeyboard({ onCommandPalette, readOnly = false }: UseKeyboardO
         return;
       }
 
-      if (e.key === 'Delete' || e.key === 'Backspace') {
+      if (e.code === 'Delete' || e.code === 'Backspace' || e.key === 'Delete' || e.key === 'Backspace') {
         if (!mod) {
           e.preventDefault();
           deleteSelected();

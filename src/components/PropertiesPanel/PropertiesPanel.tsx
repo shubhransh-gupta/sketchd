@@ -26,7 +26,7 @@ export function PropertiesPanel() {
       aria-label="Properties"
     >
       {isMulti && (
-        <p className={styles.multiLabel}>{selected.length} items selected</p>
+        <p className={styles.multiLabel}>{selected.length} items selected — press Delete</p>
       )}
 
       <div className={styles.section}>

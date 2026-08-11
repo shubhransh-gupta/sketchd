@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Logo } from '../components/Logo/Logo';
+import { SiteCredit } from '../components/SiteCredit/SiteCredit';
 import styles from './NotFoundPage.module.css';
 
 export function NotFoundPage() {
@@ -14,6 +15,7 @@ export function NotFoundPage() {
       <Link to="/" className={styles.button}>
         Create a new drawing
       </Link>
+      <SiteCredit />
     </div>
   );
 }

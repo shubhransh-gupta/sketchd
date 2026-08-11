@@ -27,6 +27,7 @@ export interface DrawingContextValue {
   addElement: (element: DrawingElement) => void;
   updateElement: (id: string, updates: Partial<DrawingElement>) => void;
   deleteSelected: () => void;
+  deleteElements: (ids: string[]) => void;
   selectElements: (ids: string[]) => void;
   setAppState: (state: Partial<AppState>) => void;
   setTitle: (title: string) => void;

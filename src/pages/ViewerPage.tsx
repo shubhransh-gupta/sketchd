@@ -5,6 +5,7 @@ import { TopBar } from '../components/TopBar/TopBar';
 import { Canvas } from '../components/Canvas/Canvas';
 import { ZoomControls } from '../components/ZoomControls/ZoomControls';
 import { ToastContainer } from '../components/Toast/Toast';
+import { SiteCredit } from '../components/SiteCredit/SiteCredit';
 import { DrawingProvider, useDrawing } from '../context/DrawingContext';
 import { createEditableCopy, loadFromGitHub } from '../lib/storage';
 import { getShareUrl } from '../lib/id';
@@ -51,6 +52,7 @@ function ViewerContent() {
       </div>
       <Canvas readOnly />
       <ZoomControls />
+      <SiteCredit />
       <ToastContainer />
     </div>
   );

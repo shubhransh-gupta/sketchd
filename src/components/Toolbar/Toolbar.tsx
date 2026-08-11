@@ -16,7 +16,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import styles from './Toolbar.module.css';
 
 const TOOLS: { tool: ToolType; icon: typeof MousePointer2; label: string; shortcut: string }[] = [
-  { tool: 'select', icon: MousePointer2, label: 'Select', shortcut: 'V' },
+  { tool: 'select', icon: MousePointer2, label: 'Remove', shortcut: 'V' },
   { tool: 'hand', icon: Hand, label: 'Hand', shortcut: 'H' },
   { tool: 'rectangle', icon: Square, label: 'Rectangle', shortcut: 'R' },
   { tool: 'diamond', icon: Diamond, label: 'Diamond', shortcut: 'D' },

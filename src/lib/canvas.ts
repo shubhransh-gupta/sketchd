@@ -35,7 +35,41 @@ export function getElementBounds(el: DrawingElement): {
   return { x: el.x, y: el.y, width: el.width, height: el.height };
 }
 
-export function hitTestElement(el: DrawingElement, point: Point, tolerance = 8): boolean {
+export function hitTestElement(el: DrawingElement, point: Point, tolerance = 10): boolean {
+  if (el.type === 'line' || el.type === 'arrow') {
+    const [p1, p2] = el.points;
+    const padding = el.strokeWidth + tolerance;
+    const minX = Math.min(p1.x, p2.x) - padding;
+    const maxX = Math.max(p1.x, p2.x) + padding;
+    const minY = Math.min(p1.y, p2.y) - padding;
+    const maxY = Math.max(p1.y, p2.y) + padding;
+    if (point.x < minX || point.x > maxX || point.y < minY || point.y > maxY) return false;
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const lenSq = dx * dx + dy * dy;
+    if (lenSq === 0) return Math.hypot(point.x - p1.x, point.y - p1.y) <= padding;
+    const t = Math.max(0, Math.min(1, ((point.x - p1.x) * dx + (point.y - p1.y) * dy) / lenSq));
+    const projX = p1.x + t * dx;
+    const projY = p1.y + t * dy;
+    return Math.hypot(point.x - projX, point.y - projY) <= padding;
+  }
+
+  if (el.type === 'freedraw' && el.points.length > 1) {
+    const padding = el.strokeWidth + tolerance;
+    for (let i = 1; i < el.points.length; i++) {
+      const p1 = el.points[i - 1];
+      const p2 = el.points[i];
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      const lenSq = dx * dx + dy * dy;
+      const t = lenSq === 0 ? 0 : Math.max(0, Math.min(1, ((point.x - p1.x) * dx + (point.y - p1.y) * dy) / lenSq));
+      const projX = p1.x + t * dx;
+      const projY = p1.y + t * dy;
+      if (Math.hypot(point.x - projX, point.y - projY) <= padding) return true;
+    }
+    return false;
+  }
+
   const bounds = getElementBounds(el);
   const padding = el.strokeWidth + tolerance;
   return (

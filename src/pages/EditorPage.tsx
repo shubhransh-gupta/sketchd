@@ -8,6 +8,7 @@ import { ZoomControls } from '../components/ZoomControls/ZoomControls';
 import { ToastContainer } from '../components/Toast/Toast';
 import { CommandPalette } from '../components/CommandPalette/CommandPalette';
 import { MobileToolbar } from '../components/MobileToolbar/MobileToolbar';
+import { SiteCredit } from '../components/SiteCredit/SiteCredit';
 import { DrawingProvider, useDrawing } from '../context/DrawingContext';
 import { useKeyboard } from '../hooks/useKeyboard';
 import { loadFromGitHub, loadDrawingLocally, loadPendingDocument } from '../lib/storage';
@@ -25,6 +26,7 @@ function EditorContent() {
       <PropertiesPanel />
       <ZoomControls />
       <MobileToolbar />
+      <SiteCredit />
       <ToastContainer />
       <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
     </div>

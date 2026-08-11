@@ -311,6 +311,9 @@ export function DrawingProvider({
         const ids = state.document.appState.selectedElementIds;
         if (ids.length) dispatch({ type: 'DELETE_ELEMENTS', ids });
       },
+      deleteElements: (ids) => {
+        if (ids.length) dispatch({ type: 'DELETE_ELEMENTS', ids });
+      },
       selectElements: (ids) => dispatch({ type: 'SELECT_ELEMENTS', ids }),
       setAppState: (appState) => dispatch({ type: 'SET_APP_STATE', state: appState }),
       setTitle: (title) => dispatch({ type: 'SET_TITLE', title }),
