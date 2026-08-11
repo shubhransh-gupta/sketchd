@@ -6,7 +6,7 @@ import { Canvas } from '../components/Canvas/Canvas';
 import { ZoomControls } from '../components/ZoomControls/ZoomControls';
 import { ToastContainer } from '../components/Toast/Toast';
 import { DrawingProvider, useDrawing } from '../context/DrawingContext';
-import { loadFromGitHub, createEditableCopy } from '../lib/storage';
+import { createEditableCopy, loadFromGitHub } from '../lib/storage';
 import { getShareUrl } from '../lib/id';
 import styles from './ViewerPage.module.css';
 

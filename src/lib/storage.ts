@@ -5,6 +5,10 @@ import { generateDrawingId } from './id';
 const STORAGE_PREFIX = 'sketchd:';
 const DRAWINGS_INDEX_KEY = `${STORAGE_PREFIX}index`;
 
+export type SaveResult =
+  | { source: 'github'; id: string; url: string }
+  | { source: 'local'; id: string; url: string; warning?: string };
+
 function getDrawingKey(id: string): string {
   return `${STORAGE_PREFIX}drawing:${id}`;
 }
@@ -26,9 +30,11 @@ function updateIndex(id: string): void {
   }
 }
 
-export function saveDrawingLocally(doc: DrawingDocument): void {
-  doc.metadata.updatedAt = new Date().toISOString();
-  doc.metadata.version += 1;
+export function saveDrawingLocally(doc: DrawingDocument, bumpVersion = true): void {
+  if (bumpVersion) {
+    doc.metadata.updatedAt = new Date().toISOString();
+    doc.metadata.version += 1;
+  }
   localStorage.setItem(getDrawingKey(doc.metadata.id), JSON.stringify(doc));
   updateIndex(doc.metadata.id);
 }
@@ -88,7 +94,9 @@ export function createEditableCopy(source: DrawingDocument): DrawingDocument {
   };
 }
 
-export async function saveToGitHub(doc: DrawingDocument): Promise<{ success: boolean; url?: string }> {
+export async function saveToGitHub(doc: DrawingDocument): Promise<SaveResult> {
+  const localUrl = `${window.location.origin}/d/${doc.metadata.id}`;
+
   try {
     const response = await fetch('/api/save', {
       method: 'POST',
@@ -98,24 +106,42 @@ export async function saveToGitHub(doc: DrawingDocument): Promise<{ success: boo
 
     if (response.ok) {
       const data = await response.json();
-      return { success: true, url: data.url };
+      // Mirror to local cache without double version bump
+      saveDrawingLocally(doc, false);
+      return {
+        source: 'github',
+        id: data.id ?? doc.metadata.id,
+        url: data.url ?? localUrl,
+      };
     }
-  } catch {
-    // Fall through to local save
-  }
 
-  saveDrawingLocally(doc);
-  return { success: true };
+    const err = await response.json().catch(() => ({}));
+    return {
+      source: 'local',
+      id: doc.metadata.id,
+      url: localUrl,
+      warning: err.error ?? 'GitHub unavailable — saved locally only',
+    };
+  } catch {
+    return {
+      source: 'local',
+      id: doc.metadata.id,
+      url: localUrl,
+      warning: 'Offline — saved locally only',
+    };
+  }
 }
 
 export async function loadFromGitHub(id: string): Promise<DrawingDocument | null> {
   try {
-    const response = await fetch(`/api/drawings/${id}`);
+    const response = await fetch(`/api/drawings/${encodeURIComponent(id)}`);
     if (response.ok) {
-      return await response.json();
+      const doc = (await response.json()) as DrawingDocument;
+      saveDrawingLocally(doc, false);
+      return doc;
     }
   } catch {
-    // Fall through
+    // Fall through to local
   }
   return loadDrawingLocally(id);
 }
@@ -134,4 +160,15 @@ export function getCurrentDrawingId(): string | null {
 
 export function setCurrentDrawingId(id: string): void {
   sessionStorage.setItem(`${STORAGE_PREFIX}current`, id);
+}
+
+export function loadPendingDocument(): DrawingDocument | null {
+  try {
+    const raw = sessionStorage.getItem(`${STORAGE_PREFIX}pending-doc`);
+    if (!raw) return null;
+    sessionStorage.removeItem(`${STORAGE_PREFIX}pending-doc`);
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
 }

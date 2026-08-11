@@ -71,29 +71,49 @@ src/
 
 ## GitHub Setup
 
-To enable GitHub save, configure a serverless API endpoint:
+Drawings are persisted to a dedicated GitHub repo via serverless API routes.
 
-```env
-GITHUB_TOKEN=ghp_...
-GITHUB_REPO=your-username/sketchd-drawings
+```bash
+# 1. Create the storage repo
+gh repo create sketchd-drawings --public
+
+# 2. Configure environment
+cp .env.example .env
+# Set GITHUB_TOKEN and GITHUB_REPO=your-username/sketchd-drawings
+
+# 3. Run locally (API middleware included in dev server)
+npm run dev
 ```
 
-The client falls back to local storage when the API is unavailable.
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for full setup and Vercel deployment.
+
+## Deployment
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/shubhransh-gupta/sketchd&env=GITHUB_TOKEN,GITHUB_REPO,SITE_URL&envDescription=GitHub%20API%20credentials&project-name=sketchd)
+
+Required environment variables on Vercel:
+
+| Variable | Value |
+|----------|-------|
+| `GITHUB_TOKEN` | Fine-grained PAT with Contents read/write on `sketchd-drawings` |
+| `GITHUB_REPO` | `your-username/sketchd-drawings` |
+| `SITE_URL` | Your Vercel deployment URL |
+
+```bash
+npm run deploy   # or: npx vercel --prod
+```
 
 ## Scripts
 
 ```bash
-npm run dev        # Development server
+npm run dev        # Development server (includes /api middleware)
 npm run build      # Production build
 npm run preview    # Preview production build
 npm run lint       # Lint with oxlint
 npm run typecheck  # TypeScript check
 npm run test       # Run tests
+npm run deploy     # Deploy to Vercel (production)
 ```
-
-## Deployment
-
-Build and deploy the `dist/` folder to any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages).
 
 ## Contributing
 

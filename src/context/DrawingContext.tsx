@@ -251,24 +251,33 @@ export function DrawingProvider({
     dispatch({ type: 'SET_SAVE_STATUS', status: 'saving' });
     try {
       saveDrawingLocally(state.document);
-      await saveToGitHub(state.document);
+      const result = await saveToGitHub(state.document);
       dispatch({ type: 'SET_SAVE_STATUS', status: 'saved' });
       dispatch({ type: 'SET_DIRTY', isDirty: false });
 
-      if (state.isFirstSave) {
-        dispatch({ type: 'SET_FIRST_SAVE', value: false });
-        addToast({
-          type: 'success',
-          title: 'Your drawing is now on GitHub',
-          description: 'Share it with anyone — no account required.',
-          duration: 5000,
-        });
+      if (result.source === 'github') {
+        if (state.isFirstSave) {
+          dispatch({ type: 'SET_FIRST_SAVE', value: false });
+          addToast({
+            type: 'success',
+            title: 'Your drawing is now on GitHub',
+            description: 'Share it with anyone — no account required.',
+            duration: 5000,
+          });
+        } else {
+          addToast({
+            type: 'success',
+            title: 'Saved to GitHub',
+            description: 'No account required.',
+            duration: 3000,
+          });
+        }
       } else {
         addToast({
-          type: 'success',
-          title: 'Saved to GitHub',
-          description: 'No account required.',
-          duration: 3000,
+          type: 'warning',
+          title: 'Saved locally',
+          description: result.warning ?? 'GitHub sync unavailable.',
+          duration: 4000,
         });
       }
 

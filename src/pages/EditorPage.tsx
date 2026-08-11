@@ -10,7 +10,7 @@ import { CommandPalette } from '../components/CommandPalette/CommandPalette';
 import { MobileToolbar } from '../components/MobileToolbar/MobileToolbar';
 import { DrawingProvider, useDrawing } from '../context/DrawingContext';
 import { useKeyboard } from '../hooks/useKeyboard';
-import { loadFromGitHub, loadDrawingLocally } from '../lib/storage';
+import { loadFromGitHub, loadDrawingLocally, loadPendingDocument } from '../lib/storage';
 import styles from './EditorPage.module.css';
 
 function EditorContent() {
@@ -71,8 +71,9 @@ export function EditorPage() {
 }
 
 export function HomePage() {
+  const pending = loadPendingDocument();
   return (
-    <DrawingProvider>
+    <DrawingProvider initialDoc={pending ?? undefined}>
       <EditorContent />
     </DrawingProvider>
   );
