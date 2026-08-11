@@ -42,7 +42,7 @@ function EditorWithDoc({ drawingId }: { drawingId?: string }) {
       setLoaded(true);
       return;
     }
-    loadFromGitHub(drawingId).then((doc) => {
+    loadFromGitHub(drawingId, { preferRemote: true }).then((doc) => {
       if (doc) loadDocument(doc);
       setLoaded(true);
     });

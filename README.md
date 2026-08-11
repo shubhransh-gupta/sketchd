@@ -108,11 +108,15 @@ Open **http://localhost:5173**
 
 ### Optional: GitHub cloud save
 
+Local dev uses Vite middleware — no extra setup beyond a `.env` file:
+
 ```bash
 cp .env.example .env
-# GITHUB_TOKEN=...  GITHUB_REPO=your-user/sketchd-drawings
+# GITHUB_TOKEN=...  GITHUB_REPO=shubhransh-gupta/sketchd-drawings
 npm run dev
 ```
+
+**Production (GitHub Pages)** needs a separate save API (Cloudflare Worker or Vercel) because static hosting cannot run `/api/save`. See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for one-time setup (`DRAWINGS_REPO_TOKEN`, `VITE_API_URL`, etc.).
 
 ---
 

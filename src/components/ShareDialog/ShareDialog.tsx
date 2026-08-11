@@ -56,7 +56,7 @@ export function ShareDialog({ drawingId, onClose }: ShareDialogProps) {
         </div>
 
         <p className={styles.description}>
-          Anyone with this link can view it.
+          Anyone with this link can view your drawing — save to cloud first so it loads for others.
         </p>
 
         <div className={styles.urlBox}>

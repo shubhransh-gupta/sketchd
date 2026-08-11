@@ -12,6 +12,10 @@ export function sketchdApiMiddleware() {
   return async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
     const url = req.url ?? '';
 
+    if (url === '/api/health' && req.method === 'GET') {
+      return sendJson(res, 200, { ok: true, repo: process.env.GITHUB_REPO ?? null });
+    }
+
     if (url === '/api/save' && req.method === 'POST') {
       try {
         const raw = await readRequestBody(req);

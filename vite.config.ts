@@ -34,6 +34,9 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_GITHUB_REPO': JSON.stringify(
         env.VITE_GITHUB_REPO || 'shubhransh-gupta/sketchd',
       ),
+      'import.meta.env.VITE_API_URL': JSON.stringify(
+        env.VITE_API_URL || process.env.VITE_API_URL || '',
+      ),
     },
     test: {
       globals: true,

@@ -28,6 +28,11 @@ export function TopBar({ readOnly = false }: { readOnly?: boolean }) {
     }
   }, [editingTitle]);
 
+  const handleShare = async () => {
+    await save();
+    setShowShare(true);
+  };
+
   const handleTitleSubmit = () => {
     const trimmed = titleValue.trim() || 'Untitled drawing';
     setTitle(trimmed);
@@ -140,7 +145,8 @@ export function TopBar({ readOnly = false }: { readOnly?: boolean }) {
 
           <button
             className={styles.shareButton}
-            onClick={() => setShowShare(true)}
+            onClick={handleShare}
+            disabled={state.saveStatus === 'saving'}
             aria-label="Share drawing"
           >
             Share
