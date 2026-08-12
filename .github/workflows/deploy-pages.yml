@@ -28,15 +28,9 @@ jobs:
       - run: npm ci
 
       - name: Build for GitHub Pages
-        run: npm run build
+        run: npm run build:pages
         env:
           GITHUB_PAGES: true
-          VITE_SITE_URL: https://shubhransh-gupta.github.io/sketchd
-          VITE_DRAWINGS_RAW_BASE: https://raw.githubusercontent.com/shubhransh-gupta/sketchd-drawings/main/drawings
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-
-      - name: SPA fallback for GitHub Pages
-        run: cp dist/index.html dist/404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:

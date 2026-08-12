@@ -1,35 +1,20 @@
 {
-  "name": "sketchd",
+  "name": "fixfr",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Draw. Save. Share. No account. A fast, open-source infinite canvas — no login required.",
+  "description": "FixFr — Fix, for real. Who owns this civic problem? Static complaint routing for India.",
   "license": "MIT",
   "author": "Shubhransh Gupta (https://github.com/shubhransh-gupta)",
-  "homepage": "https://shubhransh-gupta.github.io/sketchd/",
+  "homepage": "https://shubhransh-gupta.github.io/fixfr/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shubhransh-gupta/sketchd.git"
+    "url": "git+https://github.com/shubhransh-gupta/fixfr.git"
   },
   "bugs": {
-    "url": "https://github.com/shubhransh-gupta/sketchd/issues"
+    "url": "https://github.com/shubhransh-gupta/fixfr/issues"
   },
-  "keywords": [
-    "sketchd",
-    "drawing-app",
-    "whiteboard",
-    "infinite-canvas",
-    "excalidraw-alternative",
-    "diagramming",
-    "no-login",
-    "github-pages",
-    "react",
-    "typescript",
-    "vite",
-    "open-source",
-    "pwa",
-    "developer-tools"
-  ],
+  "keywords": ["fixfr", "civic-tech", "complaint-routing", "india", "github-pages", "open-source"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -37,23 +22,19 @@
     "lint": "oxlint src",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
+    "check-links": "node scripts/check-links.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
-    "lucide-react": "^1.31.0",
+    "leaflet": "^1.9.4",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2",
-    "uuid": "^14.0.1"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/react": "^16.3.2",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@types/uuid": "^10.0.0",
-    "@vercel/node": "^5.3.0",
     "@vitejs/plugin-react": "^6.0.4",
     "jsdom": "^30.0.1",
     "oxlint": "^1.75.0",

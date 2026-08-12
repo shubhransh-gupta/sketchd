@@ -1,155 +1,47 @@
-# Contributing to Sketch'd
+# Contributing to FixFr
 
-Thanks for helping improve Sketch'd. This guide covers how to work with the repo, branch protection, and the release flow.
+Thanks for helping make civic routing better for everyone.
 
-## Quick links
+## Ways to contribute
 
-- **Live app:** https://shubhransh-gupta.github.io/sketchd/
-- **Repo:** https://github.com/shubhransh-gupta/sketchd
-- **Drawing storage:** https://github.com/shubhransh-gupta/sketchd-drawings
+| Contribution | File(s) to edit |
+|-------------|-----------------|
+| Add authority | `data/authorities.json` |
+| Add city/location | `data/locations.json` |
+| Add/update routing | `data/problems.json` |
+| Update complaint URL | `data/authorities.json` |
+| Fix routing logic | `src/engine/router.ts` |
+| Report broken link | Open an issue or PR updating `lastVerified` |
 
----
+## Data PR checklist
 
-## Branch protection on `main`
+- [ ] Official URL verified in browser (not guessed)
+- [ ] `source` field points to verification page
+- [ ] `lastVerified` date updated
+- [ ] Entry added to `DATA.md`
+- [ ] Test added if routing behavior changed
 
-`main` is protected with rules tuned for **solo development**:
-
-| Rule | Setting |
-|------|---------|
-| Force push | Blocked |
-| Branch deletion | Blocked |
-| Linear history | Required (rebase or squash merges) |
-| Required CI checks | `build`, `deploy` (when merging PRs) |
-| Pull request reviews | Not required (direct push allowed) |
-
-### Recommended workflow
-
-For small fixes, you can push directly to `main`:
-
-```bash
-git checkout main
-git pull
-# make changes
-npm run typecheck && npm run test && npm run build
-git add -A && git commit -m "fix: describe change"
-git push origin main
-```
-
-For larger changes, use a feature branch and PR (CI runs automatically):
-
-```bash
-git checkout -b feature/my-change
-# make changes, commit
-git push -u origin feature/my-change
-gh pr create --title "feat: my change" --body "What and why"
-# merge after build + deploy checks pass
-```
-
----
-
-## Local development
+## Development
 
 ```bash
 npm install
-cp .env.example .env   # optional — for GitHub cloud save
-npm run dev            # http://localhost:5173
+npm run dev       # Start dev server
+npm test          # Run routing tests
+npm run typecheck # TypeScript check
+npm run build     # Production build
 ```
 
-### Environment variables (optional)
+## Code style
 
-| Variable | Purpose |
-|----------|---------|
-| `GITHUB_TOKEN` | Save drawings to `sketchd-drawings` via `/api` |
-| `GITHUB_REPO` | e.g. `shubhransh-gupta/sketchd-drawings` |
-| `SITE_URL` | Base URL for share links in dev |
+- TypeScript strict mode
+- Minimal scope — focused diffs
+- Match existing patterns in the codebase
+- No backend dependencies
 
-On GitHub Pages, drawings save locally in the browser. Cloud save works when running locally with a token configured.
+## Routing changes
 
----
-
-## Before you commit
-
-Run these locally — they mirror CI:
-
-```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build        # local / Vercel
-npm run build:pages  # GitHub Pages (uses /sketchd/ base path)
-```
-
----
-
-## CI / deployment
-
-Every push to `main` triggers **Deploy to GitHub Pages**:
-
-1. `build` — install, typecheck, build, SPA 404 fallback
-2. `deploy` — publish to https://shubhransh-gupta.github.io/sketchd/
-
-PRs against `main` must pass both checks before merge.
-
----
-
-## Project structure
-
-```
-src/
-├── components/   # UI (TopBar, Toolbar, Canvas, …)
-├── context/      # Drawing + theme state
-├── hooks/        # Keyboard shortcuts, etc.
-├── lib/          # Canvas engine, storage, IDs
-├── pages/        # Editor, viewer, 404
-└── styles/       # Design tokens
-
-api/              # GitHub save/load (dev + Vercel only)
-.github/workflows # Pages deploy + drawing save action
-```
-
----
-
-## Code guidelines
-
-- **Canvas first** — don't add UI that competes with the drawing surface
-- **Minimal diffs** — match existing patterns and naming
-- **No accounts** — don't add login/signup flows
-- **No secrets in client code** — GitHub tokens stay server-side
-- **Accessibility** — labels, focus states, keyboard navigation
-
----
-
-## Commit messages
-
-Use clear, imperative messages:
-
-```
-feat: add export to PNG
-fix: selection handles in dark mode
-docs: update deployment guide
-chore: bump dependencies
-```
-
----
-
-## Pull requests
-
-Include:
-
-1. **What** changed
-2. **Why** it was needed
-3. **Test plan** — steps you ran locally
-
-Example test plan:
-
-- [ ] Drew rectangle, arrow, text — smooth
-- [ ] Saved locally / to GitHub
-- [ ] Shared URL loads in incognito
-- [ ] Light and dark mode OK
-- [ ] Mobile layout OK at 375px
-
----
+Routing rules live in `data/problems.json`. Code changes to `src/engine/router.ts` should only be needed when adding new authority roles or jurisdiction mappings.
 
 ## Questions?
 
-Open an [issue](https://github.com/shubhransh-gupta/sketchd/issues) with context and steps to reproduce.
+Open an issue at https://github.com/shubhransh-gupta/fixfr/issues

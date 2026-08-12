@@ -1,0 +1,6 @@
+{
+  "city": "Bengaluru",
+  "state": "Karnataka",
+  "primaryAuthority": "bbmp",
+  "notes": "Edit data/authorities.json and data/locations.json together when extending Bengaluru coverage."
+}

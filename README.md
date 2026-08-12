@@ -1,180 +1,76 @@
-<div align="center">
+# FixFr
 
-# Sketch'd
+**Fix, for real.** Who owns this civic problem?
 
-### Draw. Save. Share. No account.
+FixFr is an open-source, static web app that routes real-world complaints to the correct government authority in India. Describe your problem in plain English — get the responsible authority, official complaint channel, and escalation path.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-6366f1?style=for-the-badge&logo=githubpages&logoColor=white)](https://shubhransh-gupta.github.io/sketchd/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/shubhransh-gupta/sketchd?style=for-the-badge&logo=github&color=6366f1)](https://github.com/shubhransh-gupta/sketchd/stargazers)
-[![Open Source](https://img.shields.io/badge/open--source-❤️-f59e0b?style=for-the-badge)](https://github.com/shubhransh-gupta/sketchd)
+**Live:** [shubhransh-gupta.github.io/fixfr](https://shubhransh-gupta.github.io/fixfr)
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-deployed-222?style=flat-square&logo=githubpages&logoColor=white)](https://shubhransh-gupta.github.io/sketchd/)
-
-<br />
-
-**The Excalidraw alternative that needs zero accounts.**  
-Open-source infinite canvas · save to GitHub · share with a URL · no signup ever.
-
-<br />
-
-[**Try it live →**](https://shubhransh-gupta.github.io/sketchd/) · [**Star on GitHub ⭐**](https://github.com/shubhransh-gupta/sketchd)
-
-<br />
-
-<img src="./public/og-image.svg" alt="Sketch'd preview" width="640" />
-
-<br />
-
-`#drawing-app` · `#whiteboard` · `#infinite-canvas` · `#excalidraw-alternative` · `#no-login` · `#opensource` · `#react` · `#typescript` · `#github-pages` · `#developer-tools` · `#diagramming` · `#pwa`
-
-</div>
-
----
-
-## Perfect for
-
-> Product Hunt · Hacker News · Reddit · GitHub Trending · Dev Twitter
-
-- **Founders** — architecture diagrams in seconds
-- **Developers** — system design, API flows, RFC sketches  
-- **Students** — whiteboarding without signups
-- **Teams** — share a link, zero workspace setup
-- **Privacy folks** — local-first, no account required
-
-**If Excalidraw + GitHub had a baby with zero friction — that's Sketch'd.**
-
----
-
-## Why Sketch'd?
-
-| | |
-|---|---|
-| **Zero friction** | Open → draw. No login, no workspace, no onboarding |
-| **Canvas-first** | Full-screen drawing surface with floating, minimal UI |
-| **Developer-native** | ⌘K command palette, keyboard shortcuts, GitHub persistence |
-| **Shareable** | Human-readable URLs like `/d/quiet-moon-42` |
-| **Private by default** | Drawings live in your browser until you choose to save |
+## What it does
 
 ```
-  Open          Draw          Save          Share
-    │             │              │              │
-    ▼             ▼              ▼              ▼
- Browser  →  Infinite canvas  →  Local / GitHub  →  Copy link
+PROBLEM → RESPONSIBLE AUTHORITY → OFFICIAL COMPLAINT CHANNEL → WHAT TO SUBMIT → ESCALATION PATH
 ```
 
----
-
-## Features
-
-- **Tools** — Select, hand, shapes, arrows, freehand, text, image upload
-- **Touchpad zoom** — Pinch to zoom, two-finger pan
-- **Themes** — System / light / dark with layered surfaces
-- **Command palette** — `⌘K` / `Ctrl+K`
-- **Clear all** — One tap with confirmation dialog
-- **PWA-ready** — Installable from the browser
-- **Mobile** — Bottom toolbar + touch gestures
-
----
-
-## Keyboard shortcuts
-
-| Key | Action |
-|-----|--------|
-| `V` | Select |
-| `H` | Hand (pan) |
-| `R` `D` `O` | Rectangle / diamond / ellipse |
-| `A` `L` `P` | Arrow / line / draw |
-| `T` `I` | Text / image |
-| `⌘K` | Command palette |
-| `⌘S` | Save |
-| `⌘Z` / `⌘⇧Z` | Undo / redo |
-
----
+FixFr is **not** a government portal. It does not submit complaints or impersonate any department.
 
 ## Quick start
 
 ```bash
-git clone https://github.com/shubhransh-gupta/sketchd.git
-cd sketchd
+git clone https://github.com/shubhransh-gupta/fixfr.git
+cd fixfr
 npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**
-
-### Optional: GitHub cloud save
-
-Local dev uses Vite middleware — no extra setup beyond a `.env` file:
+Build for production:
 
 ```bash
-cp .env.example .env
-# GITHUB_TOKEN=...  GITHUB_REPO=shubhransh-gupta/sketchd-drawings
-npm run dev
+npm run build
+npm run preview
 ```
 
-**Production (GitHub Pages)** needs a separate save API (Cloudflare Worker or Vercel) because static hosting cannot run `/api/save`. See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for one-time setup (`DRAWINGS_REPO_TOKEN`, `VITE_API_URL`, etc.).
+GitHub Pages build:
 
----
-
-## Deploy
-
-**Live:** [shubhransh-gupta.github.io/sketchd](https://shubhransh-gupta.github.io/sketchd/)
-
-Pushes to `main` auto-deploy via GitHub Actions. See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for details.
-
----
-
-## Stack
-
-```
-React 19 · TypeScript · Vite · Canvas 2D · GitHub Pages
+```bash
+npm run build:pages
 ```
 
-```
-src/
-├── components/   TopBar, Toolbar, Canvas, …
-├── lib/          Canvas engine, storage, image cache
-├── context/      Drawing + theme state
-└── pages/        Editor, viewer, 404
-```
+## Supported locations
 
----
+Coverage varies by location. Currently verified:
+
+- Bengaluru, Karnataka
+- Mysuru, Karnataka
+- Lucknow, Uttar Pradesh
+- Noida, Uttar Pradesh
+- Mumbai, Maharashtra
+- Delhi
+
+## Problem categories
+
+Garbage · Street lights · Roads · Water · Drainage · Noise · Construction · Animals · Traffic · Encroachment
+
+## Architecture
+
+100% static — deployable exclusively through GitHub Pages.
+
+- React + TypeScript + Vite
+- Static JSON datasets in `/data`
+- Client-side routing engine in `/src/engine`
+- Leaflet + OpenStreetMap for location visualization
+- No backend, database, API keys, or authentication
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 ## Contributing
 
-PRs welcome → [CONTRIBUTING.md](./CONTRIBUTING.md)
+We welcome PRs that add jurisdictions, authorities, or routing rules. See [CONTRIBUTING.md](./CONTRIBUTING.md) and [DATA.md](./DATA.md).
 
----
+## Data quality
 
-## Roadmap
+Every authority URL is documented with source and last-verified date. Never guess links — see [DATA.md](./DATA.md).
 
-- [x] Touchpad zoom & pan
-- [x] Text tool
-- [x] Image upload
-- [x] Clear all with confirm
-- [ ] Export PNG / SVG
-- [ ] Real-time collaboration
+## License
 
----
-
-<div align="center">
-
-**No login. No signup. Just draw.**
-
-<br />
-
-Created with ❤️ by **[Shubhransh Gupta](https://github.com/shubhransh-gupta)**
-
-<br />
-
-[![Star this repo](https://img.shields.io/github/stars/shubhransh-gupta/sketchd?style=social&label=Star%20Sketch'd)](https://github.com/shubhransh-gupta/sketchd/stargazers)
-
-<br />
-
-Released under the [MIT License](LICENSE) · Copyright © 2026 Shubhransh Gupta
-
-</div>
+MIT — see [LICENSE](./LICENSE).
