@@ -1,0 +1,129 @@
+[
+  {
+    "id": "garbage",
+    "category": "garbage",
+    "label": "Garbage / waste issue",
+    "keywords": ["garbage", "trash", "waste", "rubbish", "dump", "dumped", "bin", "overflow", "collection", "sanitation", "litter", "dead animal", "construction waste"],
+    "questions": ["location_type", "garbage_type"],
+    "submitChecklist": ["Exact location / landmark", "Photo of the issue", "Description and date/time", "Ward or neighbourhood name if known"],
+    "emergencyKeywords": [],
+    "routing": [
+      { "condition": {}, "authorityRole": "municipal", "department": "solid_waste", "confidence": "high", "reason": "Garbage and solid waste on public areas is typically handled by the local municipal corporation's sanitation or solid waste management department." }
+    ]
+  },
+  {
+    "id": "road",
+    "category": "road",
+    "label": "Road damage / pothole",
+    "keywords": ["pothole", "road", "broken road", "damaged road", "cave-in", "surface", "signage", "sign board", "crater", "bump"],
+    "questions": ["location_type", "road_type"],
+    "submitChecklist": ["Exact location on the road", "Photo showing the damage", "Nearby landmark", "Whether it poses immediate danger to traffic"],
+    "routing": [
+      { "condition": { "road_type": "national_highway" }, "authorityRole": "nhai", "confidence": "high", "reason": "National highways are maintained by NHAI, not the local municipality." },
+      { "condition": { "road_type": "state_highway" }, "authorityRole": "state_roads", "confidence": "likely", "reason": "State highways are typically maintained by the state Public Works Department (PWD)." },
+      { "condition": { "road_type": "local_road" }, "authorityRole": "municipal", "department": "roads", "confidence": "high", "reason": "Local residential and municipal roads are maintained by the city municipal corporation." },
+      { "condition": {}, "authorityRole": "municipal", "department": "roads", "confidence": "likely", "reason": "Most road damage complaints on city streets fall under the local municipal authority unless confirmed as a highway." }
+    ]
+  },
+  {
+    "id": "street_light",
+    "category": "street_light",
+    "label": "Street light issue",
+    "keywords": ["street light", "streetlight", "lamp", "light pole", "light not working", "dark street", "exposed wire", "electrical wire", "live wire"],
+    "questions": ["location_type"],
+    "submitChecklist": ["Pole number if visible", "Photo of the issue", "Exact location", "Whether wiring is exposed (call emergency if live wire)"],
+    "emergencyKeywords": ["live wire", "exposed wire", "spark", "electrocution", "shock"],
+    "routing": [
+      { "condition": {}, "authorityRole": "municipal", "department": "street_lighting", "confidence": "high", "reason": "Street lighting on public roads is usually maintained by the municipal corporation.", "secondaryAuthorityRole": "electricity", "secondaryReason": "If the municipal body delegates to the local electricity board, BESCOM or equivalent may handle repairs." }
+    ]
+  },
+  {
+    "id": "water",
+    "category": "water",
+    "label": "Water supply issue",
+    "keywords": ["water", "no water", "supply", "contaminated", "dirty water", "pipeline", "leak", "leaking", "pressure", "drinking water"],
+    "questions": ["location_type", "water_type"],
+    "submitChecklist": ["Address and connection ID if available", "Photo/video if water quality issue", "Duration of the problem", "Whether neighbours are affected"],
+    "routing": [
+      { "condition": { "water_type": "sewage" }, "authorityRole": "municipal", "department": "drainage", "confidence": "high", "reason": "Sewage on roads is a drainage issue handled by the municipal corporation." },
+      { "condition": { "water_type": "drinking_leak" }, "authorityRole": "water_board", "confidence": "high", "reason": "Drinking water pipeline leaks are handled by the local water supply board or municipal water department." },
+      { "condition": { "water_type": "contaminated" }, "authorityRole": "water_board", "confidence": "likely", "reason": "Water quality and supply issues go to the water board first.", "secondaryAuthorityRole": "pollution", "secondaryReason": "If contamination is severe or industrial, the Pollution Control Board may also need to be informed." },
+      { "condition": {}, "authorityRole": "water_board", "confidence": "likely", "reason": "Water supply issues are typically handled by the local water board or municipal water department." }
+    ]
+  },
+  {
+    "id": "drainage",
+    "category": "drainage",
+    "label": "Drainage / sewage issue",
+    "keywords": ["drain", "drainage", "sewage", "sewer", "manhole", "blocked", "overflow", "stagnant", "smell", "nala"],
+    "questions": ["location_type"],
+    "submitChecklist": ["Exact location", "Photo if safe to take", "Whether manhole cover is missing", "Duration of blockage"],
+    "emergencyKeywords": ["open manhole", "missing cover", "person fell"],
+    "routing": [
+      { "condition": {}, "authorityRole": "municipal", "department": "drainage", "confidence": "high", "reason": "Drainage and sewage infrastructure on public roads is maintained by the municipal corporation." }
+    ]
+  },
+  {
+    "id": "noise",
+    "category": "noise",
+    "label": "Noise complaint",
+    "keywords": ["noise", "loud", "loudspeaker", "construction noise", "music", "party", "horn", "late night", "disturbance"],
+    "questions": ["noise_now", "noise_timing"],
+    "submitChecklist": ["Source of noise (if known)", "Time and duration", "Recording if available", "Your address / affected area"],
+    "routing": [
+      { "condition": { "noise_now": "yes", "noise_timing": "night" }, "authorityRole": "police", "confidence": "high", "reason": "Active late-night noise disturbance should be reported to local police for immediate action.", "secondaryAuthorityRole": "pollution", "secondaryReason": "Recurring commercial or industrial noise may also require Pollution Control Board complaint." },
+      { "condition": { "noise_timing": "night" }, "authorityRole": "police", "confidence": "likely", "reason": "Night-time noise violations are enforced by local police under noise rules." },
+      { "condition": {}, "authorityRole": "pollution", "confidence": "likely", "reason": "Recurring noise from commercial or construction sources is handled by the Pollution Control Board.", "secondaryAuthorityRole": "police", "secondaryReason": "Police can address immediate disturbance even during daytime." }
+    ]
+  },
+  {
+    "id": "construction",
+    "category": "construction",
+    "label": "Illegal / problematic construction",
+    "keywords": ["construction", "unauthorized", "illegal building", "setback", "demolition", "blocking road", "encroach"],
+    "questions": ["location_type", "construction_type"],
+    "submitChecklist": ["Site address and photos", "Whether public road/footpath is blocked", "Builder/owner name if known", "Date you first noticed"],
+    "routing": [
+      { "condition": { "construction_type": "blocking_road" }, "authorityRole": "municipal", "department": "encroachment", "confidence": "high", "reason": "Construction blocking public roads is an encroachment/enforcement issue for the municipal authority." },
+      { "condition": {}, "authorityRole": "municipal", "department": "building", "confidence": "high", "reason": "Unauthorized construction and building violations are handled by the municipal corporation's town planning / building department." }
+    ]
+  },
+  {
+    "id": "animal",
+    "category": "animal",
+    "label": "Stray / animal issue",
+    "keywords": ["dog", "stray", "animal", "cow", "monkey", "injured animal", "dead animal", "bite", "aggressive"],
+    "questions": ["location_type", "animal_type"],
+    "submitChecklist": ["Exact location", "Type and number of animals", "Whether anyone was injured", "Photo if safe"],
+    "emergencyKeywords": ["bite", "attack", "injured person", "rabies"],
+    "routing": [
+      { "condition": { "animal_type": "injured" }, "authorityRole": "municipal", "confidence": "likely", "reason": "Injured stray animals are often handled by municipal animal welfare cells or NGOs coordinated by the corporation.", "secondaryAuthorityRole": "police", "secondaryReason": "If there is immediate danger or injury to people, contact police." },
+      { "condition": { "animal_type": "aggressive" }, "authorityRole": "police", "confidence": "high", "reason": "Aggressive animals posing immediate threat should be reported to police.", "secondaryAuthorityRole": "municipal", "secondaryReason": "Municipal animal control may assist for stray dog management." },
+      { "condition": {}, "authorityRole": "municipal", "confidence": "likely", "reason": "Stray animal nuisance is typically addressed by the municipal corporation's health or animal welfare department." }
+    ]
+  },
+  {
+    "id": "traffic",
+    "category": "traffic",
+    "label": "Traffic signal / sign issue",
+    "keywords": ["traffic signal", "signal not working", "traffic light", "junction", "intersection", "missing sign", "road sign"],
+    "questions": ["location_type", "road_type"],
+    "submitChecklist": ["Junction / intersection name", "Photo of broken signal or sign", "Time observed", "Whether traffic is backing up"],
+    "routing": [
+      { "condition": { "road_type": "national_highway" }, "authorityRole": "nhai", "confidence": "high", "reason": "Traffic infrastructure on national highways falls under NHAI." },
+      { "condition": {}, "authorityRole": "police", "department": "traffic", "confidence": "high", "reason": "Traffic signals and signs in cities are maintained by the traffic police in coordination with municipal/road authorities.", "secondaryAuthorityRole": "municipal", "secondaryReason": "Municipal body may handle physical maintenance of signal poles." }
+    ]
+  },
+  {
+    "id": "encroachment",
+    "category": "encroachment",
+    "label": "Encroachment / obstruction",
+    "keywords": ["encroach", "footpath", "blocked", "stall", "vendor", "illegal shop", "road occupied", "obstruction", "hawker"],
+    "questions": ["location_type"],
+    "submitChecklist": ["Exact location and photos", "Whether footpath or road is blocked", "Duration of encroachment", "Type of obstruction (stall, construction, parking)"],
+    "routing": [
+      { "condition": { "location_type": "footpath" }, "authorityRole": "municipal", "department": "encroachment", "confidence": "high", "reason": "Footpath encroachment is enforced by the municipal corporation's encroachment or enforcement department." },
+      { "condition": {}, "authorityRole": "municipal", "department": "encroachment", "confidence": "high", "reason": "Public land encroachment is handled by municipal enforcement.", "secondaryAuthorityRole": "police", "secondaryReason": "Police may assist if there is obstruction of traffic or public order issue." }
+    ]
+  }
+]

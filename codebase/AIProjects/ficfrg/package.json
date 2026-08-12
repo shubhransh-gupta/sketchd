@@ -1,0 +1,45 @@
+{
+  "name": "fixfr",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "FixFr — Fix, for real. Who owns this civic problem? Static complaint routing for India.",
+  "license": "MIT",
+  "author": "Shubhransh Gupta (https://github.com/shubhransh-gupta)",
+  "homepage": "https://shubhransh-gupta.github.io/FixFR/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shubhransh-gupta/FixFR.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shubhransh-gupta/FixFR/issues"
+  },
+  "keywords": ["fixfr", "civic-tech", "complaint-routing", "india", "github-pages", "open-source"],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:pages": "GITHUB_PAGES=true tsc -b && GITHUB_PAGES=true vite build && cp dist/index.html dist/404.html",
+    "lint": "oxlint src",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "check-links": "node scripts/check-links.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "jsdom": "^30.0.1",
+    "oxlint": "^1.75.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
+  }
+}

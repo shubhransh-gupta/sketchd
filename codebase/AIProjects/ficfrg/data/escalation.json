@@ -1,0 +1,43 @@
+[
+  {
+    "id": "garbage-default",
+    "category": "garbage",
+    "jurisdictionPattern": "*",
+    "steps": [
+      { "order": 1, "label": "File complaint with local municipal authority" },
+      { "order": 2, "label": "Escalate to ward-level officer via municipal grievance cell" },
+      { "order": 3, "label": "Contact state municipal administration / urban development department" },
+      { "order": 4, "label": "Lodge grievance on CPGRAMS (pgportal.gov.in) if unresolved" }
+    ]
+  },
+  {
+    "id": "road-default",
+    "category": "road",
+    "jurisdictionPattern": "*",
+    "steps": [
+      { "order": 1, "label": "Report to the responsible road authority" },
+      { "order": 2, "label": "Follow up with municipal / PWD grievance cell" },
+      { "order": 3, "label": "Escalate via state public grievance mechanism" }
+    ]
+  },
+  {
+    "id": "water-delhi",
+    "category": "water",
+    "jurisdictionPattern": "delhi",
+    "steps": [
+      { "order": 1, "label": "Register complaint with Delhi Jal Board" },
+      { "order": 2, "label": "Escalate to DJB zonal office" },
+      { "order": 3, "label": "Contact Delhi government grievance cell" }
+    ]
+  },
+  {
+    "id": "noise-default",
+    "category": "noise",
+    "jurisdictionPattern": "*",
+    "steps": [
+      { "order": 1, "label": "Contact local police for immediate disturbance" },
+      { "order": 2, "label": "File complaint with Pollution Control Board for recurring noise" },
+      { "order": 3, "label": "Escalate via state grievance portal if unresolved" }
+    ]
+  }
+]

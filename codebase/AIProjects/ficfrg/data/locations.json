@@ -1,0 +1,74 @@
+[
+  {
+    "id": "bengaluru",
+    "name": "Bengaluru",
+    "state": "Karnataka",
+    "country": "India",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "pinCodes": ["560001", "560002", "560003", "560010", "560034", "560038", "560066", "560076", "560100"],
+    "aliases": ["bangalore"],
+    "authorityIds": ["bbmp", "bescom", "kspcb", "karnataka-police", "nhai"],
+    "emergency": { "police": "100", "fire": "101", "ambulance": "108" }
+  },
+  {
+    "id": "mysuru",
+    "name": "Mysuru",
+    "state": "Karnataka",
+    "country": "India",
+    "latitude": 12.2958,
+    "longitude": 76.6394,
+    "pinCodes": ["570001", "570002", "570003", "570008"],
+    "aliases": ["mysore"],
+    "authorityIds": ["mysuru-mcc", "kspcb", "karnataka-police", "nhai"],
+    "emergency": { "police": "100", "fire": "101", "ambulance": "108" }
+  },
+  {
+    "id": "lucknow",
+    "name": "Lucknow",
+    "state": "Uttar Pradesh",
+    "country": "India",
+    "latitude": 26.8467,
+    "longitude": 80.9462,
+    "pinCodes": ["226001", "226002", "226003", "226010", "226016"],
+    "aliases": ["lko"],
+    "authorityIds": ["lmc", "uppcb", "up-police", "nhai"],
+    "emergency": { "police": "112", "fire": "101", "ambulance": "108" }
+  },
+  {
+    "id": "noida",
+    "name": "Noida",
+    "state": "Uttar Pradesh",
+    "country": "India",
+    "latitude": 28.5355,
+    "longitude": 77.391,
+    "pinCodes": ["201301", "201303", "201304", "201305", "201307"],
+    "aliases": [],
+    "authorityIds": ["noida-authority", "uppcb", "up-police", "nhai"],
+    "emergency": { "police": "112", "fire": "101", "ambulance": "108" }
+  },
+  {
+    "id": "mumbai",
+    "name": "Mumbai",
+    "state": "Maharashtra",
+    "country": "India",
+    "latitude": 19.076,
+    "longitude": 72.8777,
+    "pinCodes": ["400001", "400002", "400004", "400050", "400070", "400092"],
+    "aliases": ["bombay"],
+    "authorityIds": ["bmc", "maharashtra-pcb", "mumbai-police", "nhai"],
+    "emergency": { "police": "100", "fire": "101", "ambulance": "108" }
+  },
+  {
+    "id": "delhi",
+    "name": "Delhi",
+    "state": "Delhi",
+    "country": "India",
+    "latitude": 28.6139,
+    "longitude": 77.209,
+    "pinCodes": ["110001", "110002", "110003", "110016", "110017", "110024"],
+    "aliases": ["new delhi"],
+    "authorityIds": ["mcd", "djb", "dpcc", "delhi-police", "nhai"],
+    "emergency": { "police": "112", "fire": "101", "ambulance": "102" }
+  }
+]

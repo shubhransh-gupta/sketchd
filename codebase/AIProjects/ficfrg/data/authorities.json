@@ -1,0 +1,221 @@
+[
+  {
+    "id": "bbmp",
+    "name": "Bruhat Bengaluru Mahanagara Palike (BBMP)",
+    "shortName": "Municipal Corporation",
+    "state": "Karnataka",
+    "jurisdiction": ["Bengaluru"],
+    "departments": ["solid_waste", "roads", "drainage", "street_lighting", "encroachment", "building"],
+    "website": "https://bbmp.gov.in/",
+    "source": "https://bbmp.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [
+      { "type": "web", "label": "Official complaint portal (Sahaya)", "url": "https://sahaya.bbmp.gov.in/" },
+      { "type": "phone", "label": "BBMP call centre", "value": "1533" }
+    ]
+  },
+  {
+    "id": "bescom",
+    "name": "Bangalore Electricity Supply Company (BESCOM)",
+    "shortName": "Electricity Board",
+    "state": "Karnataka",
+    "jurisdiction": ["Bengaluru"],
+    "departments": ["street_lighting", "electrical_hazard"],
+    "website": "https://bescom.org/",
+    "source": "https://bescom.org/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [
+      { "type": "web", "label": "Official BESCOM portal", "url": "https://bescom.org/" },
+      { "type": "phone", "label": "BESCOM helpline", "value": "1912" }
+    ]
+  },
+  {
+    "id": "kspcb",
+    "name": "Karnataka State Pollution Control Board",
+    "shortName": "Pollution Control Board",
+    "state": "Karnataka",
+    "jurisdiction": ["Bengaluru", "Mysuru"],
+    "departments": ["noise", "water_pollution"],
+    "website": "https://kspcb.karnataka.gov.in/",
+    "source": "https://kspcb.karnataka.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official KSPCB website", "url": "https://kspcb.karnataka.gov.in/" }]
+  },
+  {
+    "id": "karnataka-police",
+    "name": "Karnataka State Police",
+    "shortName": "Police",
+    "state": "Karnataka",
+    "jurisdiction": ["Bengaluru", "Mysuru"],
+    "departments": ["noise", "traffic", "encroachment", "emergency"],
+    "website": "https://karnatakapolice.gov.in/",
+    "source": "https://karnatakapolice.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "phone", "label": "Emergency", "value": "100" }]
+  },
+  {
+    "id": "mysuru-mcc",
+    "name": "Mysuru City Corporation",
+    "shortName": "Municipal Corporation",
+    "state": "Karnataka",
+    "jurisdiction": ["Mysuru"],
+    "departments": ["solid_waste", "roads", "drainage", "street_lighting", "encroachment"],
+    "website": "https://mysorecity.mrc.gov.in/",
+    "source": "https://mysorecity.mrc.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official MCC website", "url": "https://mysorecity.mrc.gov.in/" }]
+  },
+  {
+    "id": "lmc",
+    "name": "Lucknow Municipal Corporation",
+    "shortName": "Municipal Corporation",
+    "state": "Uttar Pradesh",
+    "jurisdiction": ["Lucknow"],
+    "departments": ["solid_waste", "roads", "drainage", "street_lighting", "encroachment", "building"],
+    "website": "https://lmc.up.nic.in/",
+    "source": "https://lmc.up.nic.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official LMC website", "url": "https://lmc.up.nic.in/" }]
+  },
+  {
+    "id": "uppcb",
+    "name": "Uttar Pradesh Pollution Control Board",
+    "shortName": "Pollution Control Board",
+    "state": "Uttar Pradesh",
+    "jurisdiction": ["Lucknow", "Noida"],
+    "departments": ["noise", "water_pollution"],
+    "website": "https://uppcb.up.nic.in/",
+    "source": "https://uppcb.up.nic.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official UPPCB website", "url": "https://uppcb.up.nic.in/" }]
+  },
+  {
+    "id": "up-police",
+    "name": "Uttar Pradesh Police",
+    "shortName": "Police",
+    "state": "Uttar Pradesh",
+    "jurisdiction": ["Lucknow", "Noida"],
+    "departments": ["noise", "traffic", "encroachment", "emergency"],
+    "website": "https://uppolice.gov.in/",
+    "source": "https://uppolice.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "phone", "label": "Emergency", "value": "112" }]
+  },
+  {
+    "id": "noida-authority",
+    "name": "Noida Authority",
+    "shortName": "Development Authority",
+    "state": "Uttar Pradesh",
+    "jurisdiction": ["Noida"],
+    "departments": ["solid_waste", "roads", "drainage", "street_lighting", "encroachment", "building"],
+    "website": "https://www.noidaauthorityonline.in/",
+    "source": "https://www.noidaauthorityonline.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official Noida Authority portal", "url": "https://www.noidaauthorityonline.in/" }]
+  },
+  {
+    "id": "bmc",
+    "name": "Brihanmumbai Municipal Corporation (BMC)",
+    "shortName": "Municipal Corporation",
+    "state": "Maharashtra",
+    "jurisdiction": ["Mumbai"],
+    "departments": ["solid_waste", "roads", "drainage", "street_lighting", "encroachment", "building"],
+    "website": "https://portal.mcgm.gov.in/",
+    "source": "https://portal.mcgm.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [
+      { "type": "web", "label": "Official BMC portal", "url": "https://portal.mcgm.gov.in/" },
+      { "type": "phone", "label": "BMC helpline", "value": "1916" }
+    ]
+  },
+  {
+    "id": "maharashtra-pcb",
+    "name": "Maharashtra Pollution Control Board",
+    "shortName": "Pollution Control Board",
+    "state": "Maharashtra",
+    "jurisdiction": ["Mumbai"],
+    "departments": ["noise", "water_pollution"],
+    "website": "https://mpcb.gov.in/",
+    "source": "https://mpcb.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official MPCB website", "url": "https://mpcb.gov.in/" }]
+  },
+  {
+    "id": "mumbai-police",
+    "name": "Mumbai Police",
+    "shortName": "Police",
+    "state": "Maharashtra",
+    "jurisdiction": ["Mumbai"],
+    "departments": ["noise", "traffic", "encroachment", "emergency"],
+    "website": "https://mumbaipolice.gov.in/",
+    "source": "https://mumbaipolice.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "phone", "label": "Emergency", "value": "100" }]
+  },
+  {
+    "id": "mcd",
+    "name": "Municipal Corporation of Delhi (MCD)",
+    "shortName": "Municipal Corporation",
+    "state": "Delhi",
+    "jurisdiction": ["Delhi"],
+    "departments": ["solid_waste", "roads", "drainage", "street_lighting", "encroachment", "building"],
+    "website": "https://mcdonline.nic.in/",
+    "source": "https://mcdonline.nic.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official MCD online portal", "url": "https://mcdonline.nic.in/" }]
+  },
+  {
+    "id": "djb",
+    "name": "Delhi Jal Board",
+    "shortName": "Water Board",
+    "state": "Delhi",
+    "jurisdiction": ["Delhi"],
+    "departments": ["water", "sewage"],
+    "website": "https://delhijalboard.delhi.gov.in/",
+    "source": "https://delhijalboard.delhi.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [
+      { "type": "web", "label": "Official DJB website", "url": "https://delhijalboard.delhi.gov.in/" },
+      { "type": "phone", "label": "DJB helpline", "value": "1916" }
+    ]
+  },
+  {
+    "id": "dpcc",
+    "name": "Delhi Pollution Control Committee",
+    "shortName": "Pollution Control Board",
+    "state": "Delhi",
+    "jurisdiction": ["Delhi"],
+    "departments": ["noise", "water_pollution"],
+    "website": "https://dpcc.delhi.gov.in/",
+    "source": "https://dpcc.delhi.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "web", "label": "Official DPCC website", "url": "https://dpcc.delhi.gov.in/" }]
+  },
+  {
+    "id": "delhi-police",
+    "name": "Delhi Police",
+    "shortName": "Police",
+    "state": "Delhi",
+    "jurisdiction": ["Delhi"],
+    "departments": ["noise", "traffic", "encroachment", "emergency"],
+    "website": "https://delhipolice.gov.in/",
+    "source": "https://delhipolice.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [{ "type": "phone", "label": "Emergency", "value": "112" }]
+  },
+  {
+    "id": "nhai",
+    "name": "National Highways Authority of India (NHAI)",
+    "shortName": "NHAI",
+    "state": "India",
+    "jurisdiction": ["Bengaluru", "Mysuru", "Lucknow", "Noida", "Mumbai", "Delhi"],
+    "departments": ["roads", "traffic"],
+    "website": "https://nhai.gov.in/",
+    "source": "https://nhai.gov.in/",
+    "lastVerified": "2026-08-12",
+    "complaint_channels": [
+      { "type": "web", "label": "Centralized Public Grievance Portal", "url": "https://pgportal.gov.in/" },
+      { "type": "phone", "label": "NHAI helpline", "value": "1033" }
+    ]
+  }
+]
